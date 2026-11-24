@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dominio Común</title>
+<meta name="description" content="Dominio Común is a decentralized studio and creative agency founded by Jimena Luja and Alejandro Estevez.">
+<meta property="og:title" content="Dominio Común">
+<meta property="og:description" content="Dominio Común is a decentralized studio and creative agency founded by Jimena Luja and Alejandro Estevez.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* Plan: gris plano, texto negro, gris medio secundario. Todo a la izquierda, mucho aire.
+   Arriba nombre y bio; abajo pantalla dividida en dos mitades que se expanden al hover. */
+:root {
+  --bg: #e6e6e3;
+  --ink: #0a0a0a;
+  --mute: #39406a;
+  --sky: linear-gradient(180deg, #8996c6 0%, #a9b1d9 36%, #d2d1e6 66%, #eee2e8 86%, #f3dfd0 100%);
+  --bx: 50%; --ta-j: .14; --ta-a: .14;
+  --ph-j: #cfcfcb;
+  --ph-a: #c6c6c2;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+  --gut: clamp(16px, 2.2vw, 32px);
+  --ease: cubic-bezier(.22,.8,.2,1);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  background:
+    linear-gradient(90deg, rgba(200,150,205,var(--ta-j)) 0, rgba(200,150,205,var(--ta-j)) calc(var(--bx) - 20%), rgba(110,180,210,var(--ta-a)) calc(var(--bx) + 20%), rgba(110,180,210,var(--ta-a)) 100%),
+    var(--sky);
+  background-attachment: fixed; color: var(--ink); color-scheme: light;
+  font-family: var(--mono); font-weight: 500; text-transform: uppercase;
+  -webkit-font-smoothing: antialiased; overflow: hidden;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+
+.mark { position: fixed; top: 50%; z-index: 4; transform: translateY(-50%); pointer-events: none; }
+.mark-l { left: 10px; } .mark-r { right: 10px; }
+.mk { display: block; width: 16px; height: auto; opacity: .85; }
+
+.page { height: 100%; display: flex; flex-direction: column; }
+.head { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .6s var(--ease), opacity .4s ease; }
+.head > div { overflow: hidden; min-height: 0; padding: clamp(10px,1.3vw,18px) var(--gut) 0 var(--gut); }
+.bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.brand { margin: 0; font-weight: 500; font-size: clamp(16px, 1.9vw, 28px); line-height: 1; letter-spacing: -0.01em; }
+.lang { font: inherit; font-size: 12px; font-weight: 500; letter-spacing: .06em; background: none; border: 0; padding: 6px 0; color: var(--mute); cursor: pointer; }
+.lang b { color: var(--ink); font-weight: 700; }
+.bio { margin: clamp(8px, 1vw, 14px) 0 clamp(10px,1.3vw,18px); max-width: 72ch; font-weight: 500; font-size: clamp(10px, 1.05vw, 15px); line-height: 1.35; letter-spacing: 0; }
+.who { cursor: pointer; display: inline-block; transform-origin: 50% 70%; transition: transform .25s cubic-bezier(.2,.7,.2,1), font-weight .25s ease; }
+.who:hover, .who.on { transform: scale(1.14); font-weight: 800; }
+
+.split { flex: 1; min-height: 0; display: flex; gap: 0; }
+.half { position: relative; flex: 1 1 0; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; transition: flex-grow .6s var(--ease), opacity .5s ease; cursor: pointer; }
+.half-j, .half-a { background: transparent; }
+.split { position: relative; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; filter: blur(.45px); }
+.split[data-open="j"] .nm-a, .split[data-open="a"] .nm-j { opacity: 0; }
+.half { z-index: 1; }
+.half .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.split[data-active="j"] .half-j, .split[data-active="a"] .half-a { flex-grow: 2.6; }
+.split[data-active="j"] .half-a, .split[data-active="a"] .half-j { flex-grow: .55; }
+.split[data-open="j"] .half-j, .split[data-open="a"] .half-a { flex-grow: 60; }
+.split[data-open="j"] .half-a, .split[data-open="a"] .half-j { flex-grow: .0001; opacity: 0; }
+.opening .head { grid-template-rows: 0fr; opacity: 0; }
+.opening .mark { opacity: 0; }
+
+.nm { position: absolute; bottom: var(--gut); z-index: 3; pointer-events: none; font-size: clamp(12px, 1.2vw, 16px); font-weight: 500; letter-spacing: .02em; line-height: 1; white-space: nowrap; opacity: 0; transform: translateY(6px); transition: opacity .6s ease .12s, transform .7s var(--ease) .12s; }
+.nm-j { left: var(--gut); transform-origin: 0 100%; } .nm-a { right: var(--gut); text-align: right; transform-origin: 100% 100%; }
+.split[data-active="j"] .nm, .split[data-active="a"] .nm, .split[data-open="j"] .nm, .split[data-open="a"] .nm { opacity: .55; transform: none; }
+.split[data-active="j"] .nm-j, .split[data-active="a"] .nm-a, .split[data-open="j"] .nm-j, .split[data-open="a"] .nm-a { opacity: 1; transform: scale(1.8); font-weight: 700; }
+.split[data-open] .nm { transition-delay: 0s; }
+.split[data-open="j"] .nm-a, .split[data-open="a"] .nm-j { opacity: 0; }
+
+#soon { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 18px; text-align: center; padding: 24px; background: transparent; }
+#soon.show { display: flex; }
+#soon p { margin: 0; font-weight: 700; font-size: clamp(16px, 2.2vw, 28px); }
+#soon small { font-size: 12px; color: var(--ink); opacity: .7; letter-spacing: .06em; }
+#soon button { font: inherit; font-size: 12px; font-weight: 700; letter-spacing: .08em; background: none; color: var(--ink); border: 0; border-bottom: 2px solid var(--ink); padding: 4px 0; cursor: pointer; }
+
+@media (max-width: 760px) {
+  .bio { font-size: clamp(10px, 2.9vw, 13px); }
+  .mark { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .half, .head, }
+
+/* intro: primero cielo y parvada; luego aparecen texto, marcas y demás */
+body.intro .head, body.intro .mark, body.intro .nm { opacity: 0 !important; }
+body.intro-go .head, body.intro-go .mark { transition: opacity 1.6s ease, grid-template-rows .6s var(--ease); }
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="og.png">
+</head>
+<body class="intro">
+<div class="mark mark-l" aria-hidden="true"><svg class="mk" viewBox="0 0 200 200" width="26" height="26" fill="none" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 112 C40 70 76 66 100 100 C124 66 160 70 186 112"/></svg></div>
+<div class="mark mark-r" aria-hidden="true"><svg class="mk" viewBox="0 0 200 200" width="26" height="26" fill="none" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 112 C40 70 76 66 100 100 C124 66 160 70 186 112"/></svg></div>
+
+<main class="page" id="page">
+  <div class="head"><div>
+    <div class="bar">
+      <h1 class="brand">Dominio Común</h1>
+      <button class="lang" id="lang" type="button" aria-label="Cambiar idioma / Switch language"><b data-l="es">ES</b> / <span data-l="en">EN</span></button>
+    </div>
+    <p class="bio" id="bio"></p>
+  </div></div>
+  <section class="split" id="split" data-active="" data-open="" aria-label="Fundadores">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <span class="nm nm-j" aria-hidden="true">Jimena Luja</span><span class="nm nm-a" aria-hidden="true">Alejandro Estevez</span>
+    <a class="half half-j" id="half-j" href="#jimena-luja" data-who="j"><span class="label">Jimena Luja</span></a>
+    <a class="half half-a" id="half-a" href="#alejandro-estevez" data-who="a"><span class="label">Alejandro Estevez</span></a>
+  </section>
+</main>
+
+<div id="soon" role="dialog" aria-live="polite">
+  <p id="soon-name"></p>
+  <small id="soon-note"></small>
+  <button id="soon-back" type="button"></button>
+</div>
+
+<script>
+// URLs de los sitios personales. Cuando existan, basta con llenarlas.
+
+(function(){
+  var b = document.body, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function go(){ b.classList.add('intro-go'); b.classList.remove('intro'); setTimeout(function(){ b.classList.remove('intro-go'); }, 2200); }
+  if (reduce) b.classList.remove('intro'); else setTimeout(go, 2200);
+})();
+var SITES = { j: 'jimena-luja/index.html', a: 'alejandro-estevez/index.html' };
+var NAMES = { j: 'Jimena Luja', a: 'Alejandro Estevez' };
+var COPY = {
+  es: {
+    bio: 'Dominio Común es un estudio descentralizado y agencia creativa, fundado por {j} y {a}. Trabajamos con imagen en movimiento, imagen fija, nuevos medios, videojuegos y diseño de experiencias.',
+    short: { j: 'Jimena', a: 'Alejandro' }, note: 'Sitio en construcción', back: 'Volver', desc: 'Dominio Común es un estudio descentralizado y agencia creativa fundado por Jimena Luja y Alejandro Estevez.'
+  },
+  en: {
+    bio: 'Dominio Común is a decentralized studio and creative agency founded by {j} and {a}. We work across moving image, still image, new media, games, and experience design.',
+    short: { j: 'Jimena', a: 'Alejandro' }, note: 'Site under construction', back: 'Back', desc: 'Dominio Común is a decentralized studio and creative agency founded by Jimena Luja and Alejandro Estevez.'
+  }
+};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+var lang = lsGet('lang') === 'es' ? 'es' : 'en';
+var split = document.getElementById('split'), page = document.getElementById('page');
+var lastType = 'mouse';
+document.addEventListener('pointerdown', function (e) { lastType = e.pointerType; }, true);
+document.addEventListener('pointerover', function (e) { lastType = e.pointerType; }, true);
+function isTouch() { return lastType === 'touch'; }
+
+function renderBio() {
+  var c = COPY[lang];
+  var html = c.bio.replace('{j}', '<span class="who" data-who="j" tabindex="0" role="link">' + c.short.j + '</span>')
+                  .replace('{a}', '<span class="who" data-who="a" tabindex="0" role="link">' + c.short.a + '</span>');
+  document.getElementById('bio').innerHTML = html;
+  document.documentElement.lang = lang;
+  var m = document.querySelector('meta[name=description]'); if (m) m.setAttribute('content', c.desc);
+  var l = document.getElementById('lang');
+  l.innerHTML = lang === 'es' ? '<b>ES</b> / <span>EN</span>' : '<span>ES</span> / <b>EN</b>';
+  document.getElementById('soon-note').textContent = c.note;
+  document.getElementById('soon-back').textContent = c.back;
+  setActive(split.dataset.active);
+}
+function setActive(w) {
+  split.dataset.active = w || '';
+  var ws = document.querySelectorAll('.who');
+  for (var i = 0; i < ws.length; i++) ws[i].classList.toggle('on', ws[i].dataset.who === w);
+}
+function openSite(w) {
+  split.dataset.open = w; split.dataset.active = '';
+  page.classList.add('opening');
+  setTimeout(function () {
+    if (SITES[w]) { window.location.href = SITES[w]; return; }
+    document.getElementById('soon-name').textContent = NAMES[w];
+    document.getElementById('soon').classList.add('show');
+    document.getElementById('soon-back').focus();
+  }, 650);
+}
+function closeSite() {
+  document.getElementById('soon').classList.remove('show');
+  split.dataset.open = ''; page.classList.remove('opening'); setActive('');
+}
+function activate(w) {
+  if (isTouch()) { if (split.dataset.active === w) openSite(w); else setActive(w); }
+  else openSite(w);
+}
+
+document.getElementById('bio').addEventListener('pointerover', function (e) {
+  var t = e.target.closest('.who'); if (t && e.pointerType !== 'touch') setActive(t.dataset.who);
+});
+document.getElementById('bio').addEventListener('pointerout', function (e) {
+  if (e.target.closest('.who') && e.pointerType !== 'touch') setActive('');
+});
+document.getElementById('bio').addEventListener('focusin', function (e) { var t = e.target.closest('.who'); if (t) setActive(t.dataset.who); });
+document.getElementById('bio').addEventListener('focusout', function (e) { if (e.target.closest('.who')) setActive(''); });
+document.getElementById('bio').addEventListener('click', function (e) { var t = e.target.closest('.who'); if (t) activate(t.dataset.who); });
+document.getElementById('bio').addEventListener('keydown', function (e) {
+  var t = e.target.closest('.who'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openSite(t.dataset.who); }
+});
+Array.prototype.forEach.call(document.querySelectorAll('.half'), function (h) {
+  h.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') setActive(h.dataset.who); });
+  h.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') setActive(''); });
+  h.addEventListener('focus', function () { setActive(h.dataset.who); });
+  h.addEventListener('blur', function () { setActive(''); });
+  h.addEventListener('click', function (e) { e.preventDefault(); activate(h.dataset.who); });
+});
+document.getElementById('lang').addEventListener('click', function () { lang = lang === 'es' ? 'en' : 'es'; lsSet('lang', lang); renderBio(); });
+document.getElementById('soon-back').addEventListener('click', closeSite);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSite(); });
+
+
+
+renderBio();
+
+/* Parvada tipo murmuración: miles de puntos diminutos sobre un cielo en degradado.
+   Cada pájaro vuela a través de la masa (corrientes a lo largo de su eje), la masa se tuerce, se pliega
+   y le recorren ondas de densidad. Dos lóbulos (uno por fundador) se cruzan; con hover se pelan en cintas
+   y viajan a su mitad. Todo se calcula en código: sin imágenes ni modelos. */
+(function(){
+  var reduceM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cv = document.getElementById('field'), ctx = cv.getContext('2d');
+  var hj = document.getElementById('half-j'), root = document.documentElement;
+  var D = 0, IA = 0, K = { j: 0, a: 0 }, S = 0, t = 8, lastBx = -1, TS = 2.0;
+  var dpr = 1, cw = 0, ch = 0, N = 0, B = [], BX = [], BY = [];
+  var LV = 6, LAG = 0.4, PU = [[], []], PS = [[], []];
+
+  function rnd(){ return Math.random(); }
+  function sm(x){ x = x < 0 ? 0 : x > 1 ? 1 : x; return x * x * (3 - 2 * x); }
+
+  function build(){
+    B = [];
+    for (var i = 0; i < N; i++) {
+      var a = rnd() * 6.2832, r = Math.sqrt(rnd()), out = rnd() < 0.07;
+      var u0 = Math.cos(a) * r, v = Math.sin(a) * r, ch_ = Math.sqrt(Math.max(0.0004, 1 - v * v)), d = rnd();
+      B.push({ s: (u0 / ch_ + 1) / 2, v: v, c: ch_, ex: out ? 1.2 + rnd() * 1.1 : 1, fz: 0.9 + 0.14 * rnd(),
+               g: i & 1, lv: Math.min(LV - 1, (d * LV) | 0), b: d < 0.34 ? 0 : d < 0.7 ? 1 : 2,
+               sp: (0.1 + 0.1 * rnd()) * (rnd() < 0.5 ? 1 : 1), thr: 0.08 + 0.84 * rnd(), ph: rnd() * 6.2832, ph2: rnd() * 6.2832, js: 0.6 + rnd() * 1.4 });
+    }
+  }
+  function size(){
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5); cw = cv.clientWidth; ch = cv.clientHeight;
+    cv.width = Math.max(1, Math.round(cw * dpr)); cv.height = Math.max(1, Math.round(ch * dpr));
+    var n = Math.round(Math.max(3500, Math.min(9000, cw * ch / 85)));
+    if (n !== N) { N = n; build(); for (var q = 0; q < 3; q++) { BX[q] = new Float32Array(N); BY[q] = new Float32Array(N); } }
+  }
+
+  function P(cx, cy, sx, sy, th, bend, tw, wv) { return { cx: cx, cy: cy, sx: sx, sy: sy, ct: Math.cos(th), st: Math.sin(th), bend: bend, tw: tw, wv: wv }; }
+
+  // forma unida: dos lóbulos que giran uno alrededor del otro y se funden en una nube que viaja por el cielo
+  function unified(g, tt){
+    var s = g ? 1 : -1, k = Math.min(cw * 0.7, ch * 1.2);
+    var Cx = cw * (0.5 + 0.2 * Math.sin(0.13 * tt) + 0.06 * Math.sin(0.41 * tt + 1)), Cy = ch * (0.5 + 0.15 * Math.sin(0.19 * tt + 0.7));
+    var al = 1.1 * Math.sin(0.11 * tt) + 0.05 * tt, dd = k * (0.1 + 0.1 * (1 + Math.sin(0.23 * tt)));
+    return P(Cx + s * Math.cos(al) * dd, Cy + s * Math.sin(al) * dd * 0.8,
+             cw * (0.13 + 0.04 * Math.sin(0.17 * tt + g)), ch * (0.085 + 0.04 * Math.sin(0.21 * tt + 2 * g)),
+             0.5 * Math.sin(0.12 * tt + g * 1.7) + s * 0.2, 0.55 * Math.sin(0.15 * tt + g), 1.0 * Math.sin(0.1 * tt + g * 2), 0.09 * Math.sin(0.27 * tt + g));
+  }
+  // forma dividida: cada lóbulo sobre su mitad dibujando un ocho lento; la mitad activa crece
+  function divided(g, tt, cx0){
+    var hw = g ? cw - cx0 : cx0, kk = g ? K.a : K.j, s = g ? 1 : -1;
+    var cx = (g ? cx0 : 0) + hw / 2 + hw * 0.1 * Math.sin(0.37 * tt + g), cy = ch * (0.5 + 0.13 * Math.sin(0.29 * tt + g * 2));
+    var sx = Math.max(Math.min(hw * 0.2, ch * 0.3), ch * 0.13) * (1 + 0.3 * kk), sy = Math.min(ch * 0.15, hw * 0.2) * (1 + 0.25 * kk);
+    cx = Math.min(cw - sx * 0.85, Math.max(sx * 0.85, cx));
+    return P(cx, cy, sx, sy, 0.5 * Math.sin(0.19 * tt + g * 2) - s * 0.25, 0.5 * Math.sin(0.23 * tt + g), 0.9 * Math.sin(0.14 * tt + g * 2), 0.09 * Math.sin(0.31 * tt + g));
+  }
+
+  var ALPHA = [0.42, 0.6, 0.78], SZ = [1.05, 1.3, 1.55];
+
+  function frame(){
+    if (cv.clientWidth !== cw || cv.clientHeight !== ch) size();
+    var act = split.dataset.active, open = split.dataset.open;
+    ['j','a'].forEach(function(key){ var on = act === key || open === key ? 1 : 0; K[key] += (on - K[key]) * (reduceM ? 1 : 0.07); });
+    var want = (act || open) ? 1 : 0; S += (want - S) * (reduceM ? 1 : 0.028);
+    var dt = reduceM ? 0 : 0.016; t += dt;
+    var tgt = (act === 'a' || open === 'a') ? 1 : (act === 'j' || open === 'j') ? -1 : 0;
+    D += (tgt - D) * (reduceM ? 1 : 0.04);                       // toda la parvada se desplaza hacia el lado del cursor
+    IA = reduceM ? 1 : Math.min(1, IA + 0.011);                    // la parvada aparece con el cielo al cargar
+    var SH = D * cw * 0.17;
+    var T = t * TS, cx0 = hj.offsetWidth, g, l;
+    // el cielo cambia de tono hacia el lado activo
+    var bx = cw ? cx0 / cw * 100 : 50;
+    if (Math.abs(bx - lastBx) > 0.05) { lastBx = bx; root.style.setProperty('--bx', bx.toFixed(2) + '%'); }
+    root.style.setProperty('--ta-j', (0.14 + 0.22 * K.j).toFixed(3)); root.style.setProperty('--ta-a', (0.14 + 0.22 * K.a).toFixed(3));
+    for (g = 0; g < 2; g++) for (l = 0; l < LV; l++) { PU[g][l] = unified(g, T - l * LAG); PS[g][l] = divided(g, T - l * LAG, cx0); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, cw, ch);
+    var bn = [0, 0, 0], oK = open ? K[open] : 0;
+    for (var i = 0; i < N; i++) {
+      var b = B[i];
+      if (open && ((open === 'a') !== (b.g === 1)) && b.thr < oK) continue;
+      var a = PU[b.g][b.lv], c = PS[b.g][b.lv];
+      var w = sm((S - b.thr + 0.3) / 0.6);
+      b.s += b.sp * dt * (1 + 0.8 * w); if (b.s >= 1) b.s -= 1;        // el pájaro avanza a través de la masa
+      var cx = a.cx + (c.cx - a.cx) * w, cy = a.cy + (c.cy - a.cy) * w, sx = a.sx + (c.sx - a.sx) * w, sy = a.sy + (c.sy - a.sy) * w;
+      var ct = a.ct + (c.ct - a.ct) * w, st = a.st + (c.st - a.st) * w, bend = a.bend + (c.bend - a.bend) * w, wv = a.wv + (c.wv - a.wv) * w, twp = a.tw + (c.tw - a.tw) * w;
+      var u = (2 * b.s - 1) * b.c * b.ex, v = b.v;
+      var rr = Math.sqrt(u * u + v * v), tw = twp * rr;
+      var x = u * sx * b.fz, y = v * sy * b.fz * (1 + 0.22 * Math.sin(3.4 * u - 2.4 * t + b.g * 2));   // onda de densidad que recorre la bandada
+      var x2 = x - y * tw, y2 = y + x * tw;
+      y2 += bend * x2 * x2 / (sx + 1) * 0.5;
+      x2 += wv * sx * Math.sin(5 * v + 1.3 * t + b.g * 2);
+      var px = x2 * ct - y2 * st + cx + SH + Math.sin(t * 3.2 * b.js + b.ph) * 1.6, py = x2 * st + y2 * ct + cy + Math.cos(t * 2.7 * b.js + b.ph2) * 1.6;
+      var q = b.b; BX[q][bn[q]] = px; BY[q][bn[q]++] = py;
+    }
+    for (var q2 = 0; q2 < 3; q2++) {
+      ctx.fillStyle = 'rgba(16,18,38,' + (ALPHA[q2] * IA).toFixed(3) + ')'; ctx.beginPath();
+      var xs = BX[q2], ys = BY[q2], s = SZ[q2];
+      for (var k = 0; k < bn[q2]; k++) ctx.rect(xs[k], ys[k], s, s);
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  size();
+  requestAnimationFrame(frame);
+})();
+
+// Al volver con el botón atrás, la página regresa a su estado inicial
+window.addEventListener('pageshow', function (e) { if (e.persisted) closeSite(); });
+</script>
+</body>
+</html>
+

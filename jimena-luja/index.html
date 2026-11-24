@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jimena Luja</title>
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Jimena Luja — creative director. Direction, post-production, VFX and generative media.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000; --ink:#f2f2f0; --mute:#8a8a86; --ph:#141414; --line:rgba(242,242,240,.14);
+  --f:'Geist','Helvetica Neue',Helvetica,Arial,sans-serif; --m:'Geist Mono',ui-monospace,monospace;
+  --gut:clamp(14px,1.9vw,28px); --hh:56px; --pad:clamp(20px,4.5vw,64px); --tgap:clamp(28px,6vh,64px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--hh) + 16px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-weight:300;-webkit-font-smoothing:antialiased;color-scheme:dark;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cap{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:400}
+
+/* header */
+header{position:fixed;inset:0 0 auto 0;z-index:30;height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 var(--gut);font-size:13px;transition:transform .35s cubic-bezier(.22,.8,.2,1),background-color .25s}
+header.hide{transform:translateY(-100%)}
+header.solid{background:rgba(0,0,0,.92);box-shadow:0 1px 0 var(--line)}
+header .name{font-weight:400;min-height:44px;display:inline-flex;align-items:center}
+header nav{display:flex;gap:26px;align-items:center}
+header nav a,header nav button{min-height:44px;display:inline-flex;align-items:center;color:var(--mute);transition:color .2s}
+header nav a:hover,header nav a[aria-current="page"],header nav button:hover{color:var(--ink)}
+.lang b{color:var(--ink);font-weight:400}
+.menu-btn{display:none}
+@media(max-width:760px){header nav .nl{display:none}.menu-btn{display:inline-flex}}
+#sheet{position:fixed;inset:var(--hh) 0 auto 0;z-index:29;background:#000;padding:8px var(--gut) 22px;display:none;flex-direction:column;font-size:30px;border-bottom:1px solid var(--line)}
+#sheet.open{display:flex}
+#sheet a{padding:8px 0;min-height:44px}
+.view{display:none}.view.on{display:block}
+
+/* hero (negro) */
+.hero{height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;padding:0 var(--gut);position:relative;background:#000;transition:opacity .4s}
+.does{margin:0;display:flex;justify-content:center;gap:.27em;font-weight:300;font-size:clamp(22px,3.1vw,46px);letter-spacing:-.015em;line-height:1.15;white-space:nowrap}
+.does #lead{text-align:right;flex:none}
+.does .w{text-align:left;flex:none;cursor:pointer}
+.does .w .x{color:var(--mute)}
+@media(max-width:760px){.does{flex-direction:column;align-items:center;gap:.1em}.does #lead,.does .w{text-align:center;min-width:0!important}}
+.hint{position:absolute;left:50%;bottom:var(--gut);transform:translateX(-50%);min-height:44px;padding:0 12px;color:var(--mute);transition:color .2s}
+.hint:hover{color:var(--ink)}
+
+/* carrusel de destacados (lupa) */
+#col{display:flex;flex-direction:column;align-items:center;gap:clamp(28px,9vh,110px);overflow:hidden;padding:6vh 0 34vh}
+.mv{display:block;position:relative;transform-origin:50% 50%;will-change:transform}
+.mv .fr{position:relative;width:100%;aspect-ratio:var(--ar);background:var(--ph) center/cover;overflow:hidden}
+.mv[data-crop] .fr{background-size:calc(var(--c) * 100%)}
+.mv iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;opacity:0;transition:opacity .6s;transform:scale(var(--crop,1.025))}
+.mv iframe.in{opacity:1}
+#cap{position:fixed;left:var(--gut);bottom:var(--gut);z-index:20;pointer-events:none;display:block;opacity:0;transition:opacity .3s;mix-blend-mode:difference}
+#cap.on{opacity:1}
+#cap .t{font-size:13px;line-height:1.3;letter-spacing:.16em;text-transform:uppercase;font-weight:500;max-width:60vw}
+#cap .m{color:var(--mute);line-height:1.3;margin-top:4px}
+
+.all{display:flex;justify-content:space-between;align-items:baseline;margin:0 var(--gut) 10vh;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.all small{color:var(--mute)}
+.all b{font-weight:500;font-size:13px;letter-spacing:.16em;text-transform:uppercase;transition:opacity .2s}
+.all:hover b{opacity:.5}
+
+/* índice de proyectos (estilo Obys) */
+.wk{position:relative;padding:calc(var(--hh) + 4vh) var(--gut) 20vh}
+.wk-top{display:flex;justify-content:space-between;align-items:baseline;gap:20px;font-size:13px;margin-bottom:5vh}
+.wk-top h1{margin:0;font-size:13px;font-weight:400}
+.wk-top .n{color:var(--mute)}
+.filters{display:flex;flex-wrap:wrap;gap:4px 22px;font-size:13px;margin-left:-2px}
+.filters button{min-height:32px;color:var(--mute);transition:color .2s}
+.filters button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.filters sup{font-size:.75em;margin-left:2px}
+.wk-r{display:flex;gap:28px;align-items:baseline;flex:none}
+.views{display:flex;gap:0;font-size:13px;color:var(--mute)}
+.views button{color:var(--mute)}.views button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+/* vista vertical: lista | imágenes | datos */
+.wv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr);gap:var(--gut);align-items:start}
+.wv-list{position:sticky;top:calc(50vh - 120px);margin:0;padding:0;list-style:none;font-size:13px;line-height:1.5}
+.wv-list a{color:#5a5a57;transition:color .2s}
+.wv-list a:hover,.wv-list a.on{color:var(--ink)}
+.wv-list li[hidden]{display:none}
+.wv-col{display:flex;flex-direction:column;align-items:center;gap:clamp(28px,8vh,96px);padding:30vh 0}
+.wv-col a{display:block;max-width:100%;width:min(100%,calc(56vh * var(--ar)));aspect-ratio:var(--ar);flex:none;background:var(--ph) center/cover;transform-origin:50% 50%;will-change:transform;opacity:.35;transition:opacity .4s}
+.wv-col a.on{opacity:1}
+.wv-col a[hidden]{display:none}
+.wv-meta{position:sticky;top:calc(50vh - 30px);font-size:13px;line-height:1.5}
+.wv-meta .m{color:var(--mute)}
+/* vista cuadrícula */
+.wg{columns:4 240px;column-gap:var(--gut)}
+.wg a{display:block;break-inside:avoid;margin:0 0 calc(var(--gut) * 1.6)}
+.wg a[hidden]{display:none}
+.wg .im{display:block;width:100%;aspect-ratio:var(--ar);background:var(--ph) center/cover;transition:opacity .3s}
+.wg a:hover .im{opacity:.7}
+.wg .t{display:block;margin-top:8px;font-size:13px}
+.wg .c{display:block;font-size:13px;color:var(--mute)}
+@media(max-width:860px){.wv{grid-template-columns:1fr}.wv-list,.wv-meta{display:none}.wv-col{padding:4vh 0}.wv-col a{opacity:1}}
+
+/* ===== página de proyecto (estructura MÚSCULO) ===== */
+.pj{padding:0 var(--pad) 70px}
+.media{position:relative;background:#000}
+.frame{background:#000 center/cover}
+.frame iframe,.frame img,.seqframe iframe,.seqframe img{width:100%;height:100%;border:0;display:block;object-fit:cover;pointer-events:none}
+.frame,.seqframe{overflow:hidden}
+.frame iframe,.seqframe iframe{transform:scale(var(--crop,1.025));transform-origin:50% 50%}
+/* horizontal: video a pantalla completa, columnas debajo */
+.stage.land{margin-inline:calc(-1 * var(--pad));display:flex;flex-direction:column}
+.stage.land .media{display:flex;justify-content:center;background:#000;padding-top:var(--hh)}
+.stage.land .frame{position:relative;width:min(100%,calc((100svh - var(--hh)) * var(--ar)));aspect-ratio:var(--ar)}
+.stage.land .pwrap .vbar{left:50%;right:auto;transform:translateX(-50%);width:min(100%,calc((100svh - var(--hh)) * var(--ar)))}
+.stage.land .cols{padding-inline:var(--pad)}
+.cols{display:grid;grid-template-columns:1.1fr .9fr .9fr;gap:clamp(18px,3vw,44px);margin-block:var(--tgap)}
+.col p{margin:0;font-size:11px;line-height:1.6;max-width:34ch}
+.credits .pt{font-weight:700;font-size:15px;letter-spacing:.34em;text-transform:uppercase;line-height:1.35;margin:0 0 14px}
+.credits .row{display:flex;gap:14px;margin:0;font-size:11px;line-height:1.6}
+.credits .lbl{font-weight:700;min-width:46px;flex:0 0 auto}
+/* vertical: ficha | video | reseña */
+.stage.vert{margin-inline:calc(-1 * var(--pad));display:grid;grid-template-columns:1fr auto;grid-template-areas:"info video";position:relative;background:#000;padding-top:var(--hh)}
+.stage.vert .media{grid-area:video;justify-self:end;width:calc(92vh * var(--ar));max-width:78vw;aspect-ratio:var(--ar)}
+.stage.vert .frame{position:absolute;inset:0}
+.stage.vert .cols{grid-area:info;display:flex;flex-direction:column;justify-content:center;padding:24px clamp(26px,4vw,56px) 24px var(--pad);margin:0}
+.stage.vert .spacer{display:none}
+.stage.vert .credits{order:-1;border-bottom:1px solid #fff}
+.stage.vert .credits .pt{margin-bottom:22px}
+.stage.vert .credits .row{justify-content:space-between;gap:18px;border-top:1px solid rgba(255,255,255,.55);padding:8px 0;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.stage.vert .credits .row span:last-child{text-align:right}
+.stage.vert .col:not(.credits){margin-top:36px}
+.stage.vert .col:not(.credits) p{font-size:10px;line-height:1.65}
+.rotmeta{position:absolute;right:calc(92vh * var(--ar) + 12px);bottom:6px;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;font-size:9px;letter-spacing:.3em;text-transform:uppercase;white-space:nowrap;margin:0}
+@media (min-aspect-ratio:6/5) and (min-width:681px){
+  .stage.vert{grid-template-columns:1fr auto 1fr;grid-template-areas:"info video desc";align-items:center}
+  .stage.vert .media{justify-self:center;width:calc((100vh - var(--hh)) * var(--ar));max-width:60vw}
+  .rotmeta{right:calc(50% + 50vh * var(--ar) + 14px)}
+  .stage.vert .cols{display:contents}
+  .stage.vert .credits{grid-area:info;align-self:center;width:clamp(240px,24vw,440px);margin-left:var(--pad)}
+  .stage.vert .col:not(.credits){grid-area:desc;align-self:center;margin:0 var(--pad) 0 clamp(26px,3vw,60px);max-width:36ch}
+}
+/* barra de video */
+.vbar{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:clamp(14px,2vw,26px);padding:16px clamp(16px,3vw,36px);opacity:0;transition:opacity .5s;background:linear-gradient(transparent,rgba(0,0,0,.45))}
+.pwrap:hover .vbar,.pwrap.fsx .vbar,.pwrap:focus-within .vbar{opacity:1}
+.vbar button{font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;opacity:.85;white-space:nowrap;min-height:32px}
+.vbar button:hover{opacity:1}
+.track{flex:1;height:14px;display:flex;align-items:center;cursor:pointer;position:relative}
+.track:before{content:"";position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,.35)}
+.fill{position:relative;height:2px;background:#fff;width:0%;transition:width .15s linear}
+.pwrap.fsx{position:fixed!important;inset:0;z-index:500;background:#000;display:flex;align-items:center;justify-content:center;margin:0!important;width:auto!important;height:auto!important;max-width:none!important;aspect-ratio:auto!important}
+.pwrap.fsx .frame,.pwrap.fsx .seqframe{position:relative!important;top:auto!important;left:auto!important;transform:none!important;inset:auto!important;width:min(100vw,calc(100dvh * var(--ar)))!important;aspect-ratio:var(--ar)}
+body.fslock{overflow:hidden}
+/* secuencia: videos e imágenes extra */
+.seqitem{position:relative}
+.seqitem.boxed{width:fit-content;max-width:100%;margin:clamp(8px,1.1vw,18px) auto}
+.seqitem.boxed .seqframe{position:relative;width:calc(78svh * var(--ar));max-width:88vw;aspect-ratio:var(--ar);background:#000 center/cover}
+.seqlbl{margin:10px 0 0;color:var(--mute)}
+.seqgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(8px,1.1vw,18px);padding:clamp(8px,1.1vw,18px) 0;align-items:start}
+.gitem{margin:0;position:relative;overflow:hidden;background:var(--ph);aspect-ratio:var(--ar)}
+.gitem img{width:100%;height:100%;object-fit:cover;display:block}
+.gitem.wide{grid-column:1/-1}
+.gitem.sola{grid-column:1/-1;width:calc(50% - clamp(4px,.55vw,9px));margin-inline:auto}
+/* texto largo */
+.statement{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:clamp(14px,1.6vw,28px);padding:clamp(72px,9vw,150px) 0 clamp(64px,8vw,130px)}
+.st-label{grid-column:1/4;display:flex;flex-direction:column;gap:6px;padding-top:.55em;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.st-label .st-sub{font-weight:400;color:var(--mute);letter-spacing:.14em}
+.st-lead{grid-column:4/12;margin:0;font-size:clamp(22px,2.35vw,38px);line-height:1.16;letter-spacing:-.012em;max-width:30em}
+.st-body{grid-column:7/12;margin-top:clamp(40px,4.5vw,72px);padding-top:20px;border-top:1px solid #fff;font-size:clamp(14px,1.1vw,17px);line-height:1.55;max-width:48ch}
+.st-body p{margin:0}
+/* pie de proyecto */
+.brandline{display:flex;align-items:flex-start;gap:clamp(24px,4vw,60px);margin-top:var(--tgap)}
+.brand{font-weight:500;font-size:15px;letter-spacing:.34em;text-transform:uppercase;line-height:1.35}
+.made{font-weight:700;font-size:10px;line-height:1.5;padding-top:4px;margin:0}
+.locations{margin-top:var(--tgap)}
+.lh{font-weight:700;margin:0 0 12px;font-size:11px}
+.locations ul{list-style:none;margin:0;padding:0;columns:2;column-gap:clamp(40px,8vw,120px);max-width:420px}
+.locations li{font-size:11px;line-height:1.7;break-inside:avoid}
+.locations a:hover{text-decoration:underline}
+.cur{font-weight:700}
+.foot{margin-block:var(--tgap)}
+.back{font-weight:500;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#8a8a86;transition:color .2s}
+.back:hover{color:#fff}
+@media (max-width:680px),(max-aspect-ratio:1/1){
+  .stage.vert{grid-template-columns:1fr;grid-template-areas:"video" "info"}
+  .stage.vert .media{justify-self:stretch;width:100%;max-width:none}
+  .stage.vert .cols{padding:var(--tgap) var(--pad);margin-block:0}
+  .stage.vert .col:not(.credits){margin-top:24px}
+  .rotmeta{display:none}
+  .stage.land .media{height:auto;overflow:visible}
+  .stage.land .frame{position:relative;top:auto;left:auto;transform:none;width:100%}
+  .seqitem.boxed .seqframe{width:100%;max-width:none}
+  .seqitem.boxed{width:auto;margin-inline:calc(-1 * var(--pad))}
+  .seqgrid{gap:6px;padding:6px 0}
+  .seqgrid .gitem.sola{width:100%}
+  .cols{grid-template-columns:1fr}
+  .spacer{display:none}
+  .brandline{flex-direction:column;gap:14px}
+}
+@media(max-width:680px){.statement{display:block;padding:56px 0 48px}.st-label{margin-bottom:22px}.st-lead{font-size:21px;line-height:1.22}.st-body{margin-top:32px;font-size:15px}}
+
+/* ===== película (estilo Obys: panel fijo + imagen) ===== */
+.fm{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:100svh}
+.fm-side{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;justify-content:center;padding:var(--hh) var(--gut) var(--gut);font-size:13px;line-height:1.5}
+.fm-side h1{margin:0 0 6px;font-size:13px;font-weight:400}
+.fm-side .k{color:var(--mute);margin:0 0 4vh}
+.fm-dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 22px;max-width:420px}
+.fm-dl dt{color:var(--mute)}.fm-dl dd{margin:0}
+.fm-back{position:absolute;left:var(--gut);bottom:var(--gut);color:var(--mute)}
+.fm-back:hover{color:var(--ink)}
+.fm-main{padding:calc(var(--hh) + 4vh) var(--gut) 8vh;display:flex;flex-direction:column;gap:var(--gut);align-items:center}
+.fm-poster{width:min(100%,calc(84svh * var(--ar)));aspect-ratio:var(--ar);background:#0d0d0d center/cover}
+.fm-mini{width:96px;aspect-ratio:var(--ar);background:#0d0d0d center/cover;margin:0 0 4vh}
+.fm.has-v{grid-template-columns:minmax(0,.62fr) minmax(0,1.38fr)}
+.fm.has-v .fm-main{min-height:100svh;justify-content:center;padding-top:var(--hh)}
+.fm-main .seqitem.boxed{margin:0;width:100%}
+.fm-main .seqitem.boxed .seqframe{width:100%;max-width:none}
+.fm-more{padding:8vh var(--gut) 4vh;border-top:1px solid var(--line);font-size:13px}
+.fm-more p{margin:0 0 18px;color:var(--mute)}
+.fm-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gut);align-items:end}
+.fm-row a{display:block}
+.fm-row .im{display:block;width:100%;aspect-ratio:var(--ar);background:#0d0d0d center/cover;transition:opacity .3s}
+.fm-row a:hover .im{opacity:.7}
+.fm-row .t{display:block;margin-top:8px}
+@media(max-width:860px){.fm{grid-template-columns:1fr}.fm-side{position:static;height:auto;padding-top:calc(var(--hh) + 4vh)}.fm-back{position:static;margin-top:4vh;display:inline-block}.fm-row{grid-template-columns:repeat(2,1fr)}}
+
+/* about (estilo Obys) */
+.ab{padding:calc(var(--hh) + 6vh) var(--gut) 0}
+.ab-lead{margin:0;max-width:22em;font-size:clamp(24px,2.7vw,42px);line-height:1.18;letter-spacing:-.015em;font-weight:400}
+.ab-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:var(--gut);margin-top:14vh;font-size:13px;line-height:1.5}
+.ab-grid p{margin:0 0 1.2em;max-width:34em}
+.ab-blk{margin:0 0 4.5vh}
+.ab-blk .l{display:block;color:var(--mute)}
+.ab-blk ul{list-style:none;margin:0;padding:0}
+.ab-blk a{text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(242,242,240,.35)}
+.ab-blk a:hover{text-decoration-color:var(--ink)}
+.ab-word{margin:14vh 0 0;font-size:19.4vw;line-height:.8;letter-spacing:-.055em;font-weight:400;white-space:nowrap;overflow:hidden;transform:translateY(.08em)}
+@media(max-width:860px){.ab-grid{grid-template-columns:1fr}}
+/* aparición de líneas */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.22,.8,.2,1),transform .9s cubic-bezier(.22,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+footer{display:flex;justify-content:space-between;padding:var(--gut);color:var(--mute)}
+footer a:hover{color:var(--ink)}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01s!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="64x64" href="../favicon.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:description" content="Jimena Luja — creative director. Direction, post-production, VFX and generative media.">
+<meta property="og:title" content="Jimena Luja — Dominio Común">
+<meta property="og:image" content="../og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="../og.png">
+</head>
+<body>
+<a class="sr" href="#main">Skip</a>
+<header>
+  <a class="name" href="#/">Jimena Luja</a>
+  <nav aria-label="Principal">
+    <a class="nl" href="#/work" data-r="work" id="n-work">Work</a>
+    <a class="nl" href="#/about" data-r="about" id="n-about">About</a>
+    <span class="nl clock" id="clock" style="color:var(--mute)"></span>
+    <button class="lang" id="lang" aria-label="Idioma / Language"></button>
+    <button class="menu-btn" id="menu" aria-expanded="false" aria-controls="sheet">Menu</button>
+  </nav>
+</header>
+<div id="sheet"><a href="#/work" id="s-work">Work</a><a href="#/about" id="s-about">About</a></div>
+
+<main id="main">
+  <section class="view" id="v-home">
+    <div class="hero">
+      <h1 class="does"><span id="lead">Jimena Luja does</span><span class="w" id="word" aria-live="off"></span></h1>
+      <button class="hint cap" id="hint" type="button">Scroll ↓</button>
+    </div>
+    <div id="col"></div>
+    <a class="all" id="work-anchor" href="#/work"><small class="cap" id="all-s"></small><b id="all-b"></b></a>
+  </section>
+  <section class="view" id="v-proj"></section>
+  <section class="view" id="v-about"></section>
+  <section class="view" id="v-work"></section>
+</main>
+<div id="cap" aria-hidden="true"><div class="t" id="cap-t"></div><div class="m cap" id="cap-m"></div></div>
+<footer id="foot"></footer>
+
+<script>
+{
+/* ============ CONTENIDO — editar aquí ============ */
+var CONFIG={libelulaUrl:'../index.html',email:'jimenaluam@gmail.com',phone:'+1 310 717 8655',instagram:'https://www.instagram.com/ji.me.nae/',address:'Av. Paseo de la Reforma 27<br>Col. Tabacalera, Ciudad de México'};
+var WORDS={
+  es:['dirección creativa','dirección','postproducción','VFX','CGI','medios generativos','cine','edición','color','sonido','UX / UI','diseño gráfico'],
+  en:['creative direction','direction','post-production','VFX','CGI','generative media','film','editing','color','sound','UX / UI','graphic design']
+};
+var CATS={film:{es:'Cine',en:'Film'},commercial:{es:'Comercial',en:'Commercial'},editorial:{es:'Editorial / Moda',en:'Editorial / Fashion'},music:{es:'Video musical',en:'Music video'},personal:{es:'Personal',en:'Personal'}};
+var CAT_ORDER=['film','commercial','editorial','music','personal'];
+/* destacados de la portada, en este orden */
+var FEATURED=['ai-mock-campaign','the-north-face','movistar','heil-jupiter','serie-nova','mugler'];
+
+var MX='https://musculo.xyz/images/';
+/* proporción real de cada imagen (ancho / alto) */
+var RATIO={'img/v-yoplait.jpg':1.5,'img/v-tnf.jpg':1.7778,'img/v-movistar.jpg':1.7778,'img/v-mugler.jpg':1.7778,'img/v-bk.jpg':1.7778,'img/v-aberration.jpg':1.7778,'img/v-venteya.jpg':1.7778,'img/pocari-sun.jpg':.8,'img/nova-altar.jpg':1.7778,'img/film-heil-jupiter.jpg':.7483,'img/film-desaparecer.jpg':.6563,'img/film-salon.jpg':.785,'img/film-fortaleza.jpg':.755,'img/film-hijas.jpg':.8075,'img/mock-dive.jpg':.8085,'img/v-heil.jpg':1.3128,'img/v-nova-core.jpg':.5624,'img/v-nissan.jpg':2,'img/v-filia-anniv.jpg':.8};
+function rat(u){return RATIO[u]||1.7778}
+/* ancho para que todas las piezas tengan la misma área en pantalla, sin perder su proporción */
+function eqW(ar,base,maxW,maxH){var A=base*base/1.7778,w=Math.sqrt(A*ar);return Math.min(w,maxW,maxH*ar)}
+function VT(h){return 'https://i.vimeocdn.com/video/'+h+'-d_1280?region=us'}
+function L(es,en){return {es:es,en:en===undefined?es:en}}
+
+/* kind: video | image | film.
+   main: video principal {id,ar} o imagen {img,ar}. seq: videos extra. grid: imágenes extra.
+   desc: reseña corta. statement: texto largo. tag: línea vertical. */
+var PROJECTS=[
+ {slug:'the-north-face',cat:'commercial',kind:'video',title:'The North Face',client:'The North Face',year:'2024',
+  role:L('CGI / Postproducción','CGI / Post-production'),tag:'Global Warming',
+  poster:'img/v-tnf.jpg',
+  main:{id:'1084847556',ar:1.7778},
+  seq:[{id:'996474118',ar:1.7778,label:'Metamorph',poster:'img/v-tnf-meta.jpg'}],
+  desc:L('Global Warming: una pieza de declaración ambiental que traduce el retroceso de los glaciares en una lenta meditación en CGI para la marca outdoor.','Global Warming — an environmental statement piece translating retreating glaciers into a slow CGI meditation for the outdoor brand.')},
+ {slug:'movistar',cat:'commercial',kind:'video',title:'Movistar',client:'Movistar',year:'2024',
+  role:L('Postproducción / VFX','Post-production / VFX'),tag:'This Is Not a Game',
+  poster:'img/v-movistar.jpg',
+  main:{id:'1086980182',ar:1.7778},
+  desc:L('This Is Not a Game: postproducción y composición completas para la campaña de telecomunicaciones, que mezcla imagen real con secuencias de motor de videojuego.','This Is Not a Game — full post-production and compositing for the telecom campaign, blending live action with game-engine sequences.')},
+ {slug:'serie-nova',cat:'commercial',kind:'video',title:'Serie NOVA',client:'Bandido Studio',year:'2025',
+  role:L('CGI / Campaña','CGI / Campaign'),tag:'Bandido Studio · CGI Campaign',
+  poster:'img/v-nova-core.jpg',
+  main:{id:'1209617395',ar:.5625,poster:'img/v-nova-core.jpg'},
+  seq:[{id:'1209617397',ar:.5625,poster:'img/v-nova-axis.jpg'},
+       {id:'1209617396',ar:.5625,poster:'img/v-nova-flux.jpg'}],
+  grid:[{img:'img/nova-altar.jpg',ar:1.7778,wide:1},{img:'img/nova-fog.jpg',ar:1.7778,wide:1}],
+  desc:L('Campaña en CGI para la colección NOVA: CORE, AXIS y FLUX, tres luminarias de diseño industrial representadas como estudios escultóricos de luz y materia.','A CGI campaign for the NOVA collection — CORE, AXIS and FLUX, three industrial-design luminaires rendered as sculptural studies in light and material.')},
+ {slug:'mugler',cat:'editorial',kind:'video',title:'Mugler',client:'Mugler (Angel)',year:'2024',
+  role:L('CGI / VFX'),tag:'Fragrance · Mexico City',
+  poster:'img/v-mugler.jpg',
+  main:{id:'1052064684',ar:1.7778},
+  desc:L('Render principal para Mugler Angel: vidrio fracturado, una estrella en levitación y un lento florecer de partículas. Composición híbrida de CGI e imagen real para la campaña de fragancia.','Hero rendering for Mugler Angel — fractured glass, levitating star and slow particle bloom. Hybrid CGI-to-camera composite for the fragrance campaign.')},
+ {slug:'pocari',cat:'commercial',kind:'image',title:'Pocari',client:'Pocari Sweat',year:'2026',
+  role:L('Concepto / Creación de imagen con IA','Concept / AI image creation'),tag:'AI Campaign · Social Media',
+  poster:'img/pocari-sun.jpg',
+  main:{img:'img/pocari-sun.jpg',ar:.8},
+  grid:[{img:'img/pocari-padel.jpg',ar:.8},{img:'img/pocari-track.jpg',ar:.7475}],
+  desc:L('Fotografías seleccionadas de la campaña con IA para el agua Pocari, 2026: tres imágenes concebidas y creadas para redes sociales.','Selected photos of the AI campaign for Pocari water, 2026 — three images conceived and created for social media.')},
+ {slug:'nissan',cat:'commercial',kind:'video',title:'Nissan',client:'Nissan',year:'2023',
+  role:L('VFX / Postproducción','VFX / Post-production'),tag:'Electric Power · VFX',
+  poster:'img/v-nissan.jpg',
+  main:{id:'1058735045',ar:2},
+  desc:L('Electric Power: VFX y finalización para el film de lanzamiento del vehículo eléctrico, con estelas de luz, campos de energía e integración impecable del vehículo en CG.','Electric Power — VFX and finishing for the EV launch film: light trails, energy fields and seamless CG vehicle integration.')},
+ {slug:'filia',cat:'editorial',kind:'video',title:'Filia',client:'Filia',year:'2023',
+  role:L('Campaña / Film / Diseño gráfico','Campaign / Film / Graphic design'),tag:'Studio Collaboration',
+  poster:'img/v-filia-anniv.jpg',
+  main:{id:'1203691568',ar:.8,poster:'img/v-filia-anniv.jpg'},
+  seq:[{id:'1203691512',ar:.5634,label:'Pop-up Japan',poster:'img/v-filia-popup.jpg'},
+       {id:'1058735407',ar:1.7778,label:'Campaign 2023',poster:'img/v-filia.jpg'}],
+  grid:[{img:'img/filia-tokyo.jpg',ar:.75},{img:'img/filia-xulistar.jpg',ar:.746},{img:'img/filia-buddhas.jpg',ar:.7467,sola:1}],
+  desc:L('Colaboración con Filia a lo largo de varios años: campañas, films, pop-ups y gráficos realizados entre la Ciudad de México y Tokio.','A collaboration with Filia over several years — campaigns, films, pop-ups and graphics made across Mexico City and Tokyo.')},
+ {slug:'yoplait',cat:'commercial',kind:'video',title:'Yoplait',client:'Yoplait',year:'2023',
+  role:L('CGI / Tabletop'),tag:'Griego Extra Cremoso',
+  poster:VT('1990485202-8f1645074351c1619be478f89b9b5543edd1d82507d9a67ea9c3a82f988f4963'),live:1,
+  main:{id:'1063391525',ar:1.5},
+  desc:L('Griego Extra Cremoso: simulación de fluidos de alta viscosidad y CGI de tabletop para el film de producto. Cada vertido es sintético.','Griego Extra Cremoso — high-viscosity fluid simulation and tabletop CGI for the product film. Every pour is synthetic.')},
+ {slug:'burger-king',cat:'commercial',kind:'video',title:'Burger King',client:'Burger King',year:'2023',
+  role:L('CGI / Tabletop'),tag:'Angus',
+  poster:'img/v-bk.jpg',
+  main:{id:'1058815980',ar:1.7778},
+  desc:L('Angus: CGI de comida y finalización para la campaña, con pases de fuego, humo y texturas macro construidos por completo en 3D.','Angus — food CGI and finishing for the campaign: fire, smoke and macro texture passes built entirely in 3D.')},
+ {slug:'aberration',cat:'editorial',kind:'video',title:'Aberration',client:'Purple Magazine',year:'—',
+  role:L('Dirección · VFX','Direction · VFX'),tag:'Purple Magazine',
+  poster:'img/v-aberration.jpg',
+  main:{id:'722657901',ar:1.7778},desc:null},
+ {slug:'vente-ya',cat:'music',kind:'video',title:'Vente Ya',client:'Buazizi',year:'2022',
+  role:L('Dirección / VFX / Realización','Direction / VFX / Filmmaking'),tag:'Buazizi · Music Video',
+  poster:'img/v-venteya.jpg',
+  main:{id:'723021018',ar:1.7778},
+  desc:L('Video musical para el sencillo Vente Ya: dirección, VFX y finalización, con color, limpieza y entornos compuestos.','Music video for the single Vente Ya — direction, VFX and finishing: color, cleanup and composited environments.')},
+ {slug:'ai-mock-campaign',cat:'personal',kind:'image',title:'AI Mock Campaign',client:'MÚSCULO',year:'2026',
+  role:L('Concepto / Imagen con IA / Dirección de arte','Concept / AI imagery / Art direction'),tag:'MÚSCULO · Lacrosse',
+  poster:'img/mock-dive.jpg',
+  main:{img:'img/mock-dive.jpg',ar:.8085},
+  grid:[['pinned',.8055],['field-duo',.8055],['hoodie-78',.8055],['shirt-lift',.8055],['group',1.4903,1],['run',.8055],['pair',.8055],['cricket-sweater',.8085],['film-frame',.8055]].map(function(n){return {img:'img/mock-'+n[0]+'.jpg',ar:n[1],wide:n[2]}}),
+  desc:L('Lacrosse, códigos preppy y un prado de verano al atardecer: una campaña ficticia hecha por completo con IA.','Lacrosse, preppy codes and a summer meadow at sunset — a mock campaign made entirely with AI.'),
+  statement:{label:L('La campaña','The campaign'),sub:'MÚSCULO — 2026',
+   lead:L('Una campaña ficticia de estilo de vida y deporte, concebida y producida por completo con IA. Gira en torno al lacrosse y mezcla la estética de Abercrombie & Fitch de principios de los 2000 con los códigos preppy de los noventa: polos en capas, suéteres de críquet y una elegancia heredada, reinterpretados con una mirada contemporánea en un prado de verano al atardecer.','A fictional lifestyle and sports campaign, conceived and produced entirely with AI. Built around lacrosse, it blends early-2000s Abercrombie & Fitch with ’90s preppy codes: layered polos, cricket sweaters and inherited elegance, reimagined through a contemporary lens in a summer meadow at sunset.'),
+   body:L('Con un tono lúdico, sigue a un grupo de amigos que juegan lacrosse, se empujan entre jugadas y se desploman en el pasto al terminar el partido. Dentro de uno de los deportes de contacto más masculinos, se detiene en la cercanía, la ternura y una sutil tensión homoerótica que reescribe el arquetipo del atleta preppy.','Playful at its core, it follows a group of friends playing lacrosse, roughhousing between plays and collapsing into the grass after the game. Within one of the most masculine contact sports, it lingers on closeness, tenderness and a subtle homoerotic tension that rewrites the prep-athlete archetype.')}},
+ /* películas */
+ {slug:'heil-jupiter',cat:'film',kind:'film',title:'Heil Jupiter!',fk:L('Largometraje','Feature film'),director:'Carlos Reygadas',year:'2026',
+  country:L('México · Polonia · Portugal · Noruega · Suecia','Mexico · Poland · Portugal · Norway · Sweden'),role:L('VFX'),
+  recog:L('New York Film Festival 2026 · Currents · Estreno mundial','New York Film Festival 2026 · Currents · World premiere'),
+  fposter:'img/film-heil-jupiter.jpg',poster:'img/v-heil.jpg',
+  video:{id:'1246400742',ar:1.3128}},
+ {slug:'desaparecer-por-completo',cat:'film',kind:'film',title:'Desaparecer por completo',fk:L('Largometraje','Feature film'),director:'Luis Javier Henaine',year:'2022',
+  country:L('México','Mexico'),role:L('VFX'),collab:'Javier Velázquez Dorantes',
+  recog:L('Premio Ariel 2024 · Mejores Efectos Visuales','Ariel Award 2024 · Best Visual Effects'),fposter:'img/film-desaparecer.jpg'},
+ {slug:'salon-de-belleza',cat:'film',kind:'film',title:'Salón de Belleza',fk:L('Largometraje','Feature film'),director:'Nathalia Acevedo',year:'2026',
+  country:L('México · Francia','Mexico · France'),role:L('DIT · Supervisión de VFX','DIT · VFX Supervision'),
+  recog:L('Giornate degli Autori 2026 · Competencia · Venecia','Giornate degli Autori 2026 · Competition · Venice'),fposter:'img/film-salon.jpg'},
+ {slug:'una-fortaleza',cat:'film',kind:'film',title:'Una Fortaleza',fk:L('Cortometraje','Short film'),director:'Alba Gaviraghi',year:'2026',
+  country:L('Chile'),role:L('VFX'),
+  recog:L('Festival de Venecia 2026 · Orizzonti · Selección oficial','Venice Film Festival 2026 · Orizzonti · Official Selection'),fposter:'img/film-fortaleza.jpg'},
+ {slug:'hijas-unikas',cat:'film',kind:'film',title:'Hijas Únikas',fk:L('Largometraje','Feature film'),director:'Alba Gaviraghi',year:'2026',
+  country:L('Chile · Alemania · México','Chile · Germany · Mexico'),role:L('VFX'),
+  recog:L('FICValdivia 2026 · Selección oficial','FICValdivia 2026 · Official Selection'),fposter:'img/film-hijas.jpg'}
+];
+/* orden: del mejor al peor */
+var ORDER=['pocari','serie-nova','movistar','the-north-face','heil-jupiter','mugler','filia','ai-mock-campaign','desaparecer-por-completo','salon-de-belleza','aberration','vente-ya','una-fortaleza','hijas-unikas','yoplait','burger-king','nissan'];
+PROJECTS.sort(function(a,b){return ORDER.indexOf(a.slug)-ORDER.indexOf(b.slug)});
+PROJECTS.forEach(function(p){p.feat=FEATURED.indexOf(p.slug)>-1;if(p.kind==='film'&&!p.poster)p.poster=p.fposter});
+var FILMS=PROJECTS.filter(function(p){return p.kind==='film'});
+
+var T={
+  es:{lead:'Jimena Luja hace',hint:'Ver proyectos ↓',work:'Proyectos',about:'Acerca de',menu:'Menú',
+    all:'Todos los proyectos',allS:'Archivo',filterAll:'Todos',reach:'Contacto',based:'Ciudad de México',write:'Escríbeme',pending:'Por confirmar',
+    client:'Cliente',role:'Rol',year:'Año',director:'Dirección',country:'País',collab:'En colaboración con',recog:'Reconocimientos',
+    films:'Cine',prev:'[ Ant ]',next:'[ Sig ]',selected:'Proyectos seleccionados :',home:'← Inicio',made:'Ciudad de México<br>Efectos visuales · Postproducción · Medios generativos',
+    pause:'Pausa',play:'Reproducir',sOn:'Sonido',sOff:'Silencio',fs:'Pantalla completa',
+    bio:'Jimena Luja es directora creativa radicada en la Ciudad de México. Concibe y dirige proyectos de principio a fin, del concepto y el set a la postproducción y la entrega, con la estructura de una agencia concentrada en una sola persona. Su práctica integra dirección, efectos visuales, CGI, medios generativos, composición, edición y color en flujos de trabajo híbridos que dan lugar a contenido visualmente complejo y guiado por el concepto.<br><br>Trabaja en campañas, comerciales, moda, video musical y cine con marcas y artistas de México y Nueva York. Es cofundadora de Dominio Común.'},
+  en:{lead:'Jimena Luja does',hint:'View work ↓',work:'Work',about:'About',menu:'Menu',
+    all:'All projects',allS:'Archive',filterAll:'All',reach:'Contact',based:'Mexico City',write:'Write to me',pending:'To be confirmed',
+    client:'Client',role:'Role',year:'Year',director:'Director',country:'Country',collab:'In collaboration with',recog:'Recognition',
+    films:'Films',prev:'[ Prev ]',next:'[ Next ]',selected:'Selected Works :',home:'← Home',made:'Made in Mexico City<br>Visual Effects · Post-Production · Generative Media',
+    pause:'Pause',play:'Play',sOn:'Sound On',sOff:'Sound Off',fs:'Fullscreen',
+    bio:'Jimena Luja is a creative director based in Mexico City. She conceives and leads projects end to end, from concept and set to post-production and delivery, with the structure of an agency held by a single person. Her practice brings together direction, visual effects, CGI, generative media, compositing, editing and color through hybrid workflows that produce visually complex, concept-driven work.<br><br>She works across campaigns, commercials, fashion, music videos and film with brands and artists from Mexico and New York. She is a co-founder of Dominio Común.'}
+};
+
+/* ============ LÓGICA ============ */
+var $=function(s){return document.querySelector(s)};
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+var lang=ls('lang')==='es'?'es':'en';
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function bg(u){return u?'background-image:url('+esc(u)+')':''}
+function vsrc(id,bgmode){return 'https://player.vimeo.com/video/'+encodeURIComponent(id)+(bgmode?'?background=1&autoplay=1&loop=1&muted=1&playsinline=1&dnt=1&api=1&texttrack=false':'?title=0&byline=0&portrait=0&dnt=1&api=1')}
+
+/* text scramble */
+var GLY='!<>-_\\/[]{}—=+*^?#01ABCDEFXYZ',wi=0,wEl=$('#word'),sTimer,fr=0,queue=[];
+function scrambleTo(nt){var old=wEl.textContent,len=Math.max(old.length,nt.length);queue=[];
+  for(var i=0;i<len;i++){var s=Math.floor(Math.random()*5),e=s+4+Math.floor(Math.random()*6);queue.push({f:old[i]||'',t:nt[i]||'',s:s,e:e,c:''})}
+  cancelAnimationFrame(sTimer);fr=0;step()}
+function step(){var out='',done=0;
+  for(var i=0;i<queue.length;i++){var q=queue[i];
+    if(fr>=q.e){done++;out+=esc(q.t)}
+    else if(fr>=q.s){if(!q.c||Math.random()<.45)q.c=GLY[Math.floor(Math.random()*GLY.length)];out+='<span class="x">'+esc(q.c)+'</span>'}
+    else out+=esc(q.f)}
+  wEl.innerHTML=out;if(done<queue.length){fr++;sTimer=requestAnimationFrame(step)}}
+function cycle(){var w=WORDS[lang];wi=(wi+1)%w.length;if(reduce)wEl.textContent=w[wi];else scrambleTo(w[wi])}
+function sizeWord(){var s=document.createElement('span');s.style.cssText='position:absolute;visibility:hidden;white-space:nowrap';wEl.parentNode.appendChild(s);var m=0;WORDS[lang].forEach(function(x){s.textContent=x;m=Math.max(m,s.offsetWidth)});s.remove();if(m)wEl.style.minWidth=m+'px'}
+var cyc;function startCycle(){sizeWord();clearInterval(cyc);wi=0;wEl.textContent=WORDS[lang][0];cyc=setInterval(cycle,1600)}
+
+/* portada: destacados con lupa */
+var FEAT=[],mvs=[],tops=[],hs=[],cur=-1;
+function bySlug(s){for(var i=0;i<PROJECTS.length;i++)if(PROJECTS[i].slug===s)return PROJECTS[i];return null}
+function featVideo(p){return p.kind==='film'?(p.video&&p.video.id):(p.main&&p.main.id)}
+function buildHome(){var t=T[lang],h='';
+  FEAT=FEATURED.map(bySlug).filter(Boolean);
+  FEAT.forEach(function(p,i){var cr=CROP[featVideo(p)];h+='<a class="mv" href="#/work/'+p.slug+'" data-i="'+i+'"'+(cr?' data-crop':'')+' style="--ar:'+rat(p.poster)+(cr?';--c:'+cr:'')+'" aria-label="'+esc(p.title)+'"><div class="fr" style="'+bg(p.poster)+'"></div></a>'});
+  $('#col').innerHTML=h;$('#all-s').textContent=t.allS+' ('+PROJECTS.length+')';$('#all-b').textContent=t.all+' →';$('#lead').textContent=t.lead;$('#hint').textContent=t.hint;
+  mvs=[].slice.call(document.querySelectorAll('.mv'));cur=-1;layout()}
+function layout(){var W=innerWidth,H=innerHeight,base=W<760?W*.86:Math.min(W*.54,H*.58*1.7778);
+  mvs.forEach(function(el,i){var w=eqW(rat(FEAT[i].poster),base,W*(W<760?.9:.7),H*.62);el.style.width=w+'px';el.style.transform=''});
+  tops=mvs.map(function(el){return el.offsetTop});hs=mvs.map(function(el){return el.offsetHeight});tickMv()}
+function tickMv(){var hr=document.querySelector('.hero');if(hr)hr.style.opacity=Math.max(.15,1-scrollY/(innerHeight*.8)).toFixed(3);
+  if(!$('#v-home').classList.contains('on')){$('#cap').classList.remove('on');return}
+  var vh=innerHeight,mid=scrollY+vh/2,best=-1,bd=1e9;
+  for(var i=0;i<mvs.length;i++){var c=tops[i]+hs[i]/2,d=Math.abs(c-mid),k=Math.min(1,d/(vh*.58)),e=(1+Math.cos(Math.PI*k))/2;
+    mvs[i].style.transform='scale('+(reduce?1:(.38+.62*e)).toFixed(4)+')';if(d<bd){bd=d;best=i}}
+  var gi=$('#work-anchor').getBoundingClientRect().top,inZone=mvs.length&&bd<vh*.45&&gi>vh-8;$('#cap').classList.toggle('on',!!inZone);
+  if(best!==cur&&inZone){cur=best;var p=FEAT[best];$('#cap-t').textContent=p.title;$('#cap-m').textContent=CATS[p.cat][lang];playPreview(best)}}
+function playPreview(i){mvs.forEach(function(el,j){var f=el.querySelector('iframe');if(j!==i&&f)f.remove()});
+  var p=FEAT[i],id=p&&featVideo(p);if(!id||reduce)return;var va=p.kind==='film'?p.video.ar:p.main.ar;if(Math.abs(va-rat(p.poster))>.05)return;var box=mvs[i].querySelector('.fr');if(box.querySelector('iframe'))return;
+  var f=document.createElement('iframe');if(CROP[id])f.style.setProperty('--crop',CROP[id]);f.src=vsrc(id,true);f.allow='autoplay; fullscreen';f.title=p.title;f.onload=function(){f.classList.add('in')};box.appendChild(f)}
+
+/* índice (estilo Obys) */
+var filt='all',view='v',wvItems=[],wvCur=-1;
+function thumb(p){return p.kind==='film'?p.fposter:p.poster}
+function tar(p){return p.live?p.main.ar:rat(thumb(p))}
+function liveIf(p){return p.live?'<iframe src="'+vsrc(p.main.id,true)+'" allow="autoplay" title="'+esc(p.title)+'" style="position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;transform:scale(1.025)"></iframe>':''}
+function listSub(p){var who=p.kind==='film'?p.director:p.client;return CATS[p.cat][lang]+(who&&who!==p.title?' · '+who:'')}
+function buildWork(){var t=T[lang],L=lang==='es'?{sel:'Proyectos seleccionados',v:'Vertical',g:'Cuadrícula'}:{sel:'Selected works',v:'Vertical',g:'Grid'};
+  var cnt=function(c){return c==='all'?PROJECTS.length:PROJECTS.filter(function(p){return p.cat===c}).length};
+  var VIEWS='<div class="views"><button data-v="v" aria-pressed="'+(view==='v')+'">'+L.v+'</button><span>,&nbsp;</span><button data-v="g" aria-pressed="'+(view==='g')+'">'+L.g+'</button></div>';
+  var fb=[['all',t.filterAll]].concat(CAT_ORDER.map(function(c){return [c,CATS[c][lang]]})).map(function(f){return '<button data-f="'+f[0]+'" aria-pressed="'+(filt===f[0])+'">'+esc(f[1])+'<sup>'+cnt(f[0])+'</sup></button>'}).join('');
+  var list=PROJECTS.map(function(p,k){return '<li data-c="'+p.cat+'"><a href="#/work/'+p.slug+'" data-k="'+k+'">'+esc(p.title)+'</a></li>'}).join('');
+  var col=PROJECTS.map(function(p,k){var im=thumb(p);return '<a href="#/work/'+p.slug+'" data-k="'+k+'" data-c="'+p.cat+'" style="position:relative;overflow:hidden;--ar:'+tar(p)+';'+bg(im)+'" aria-label="'+esc(p.title)+'">'+liveIf(p)+'</a>'}).join('');
+  var grid=PROJECTS.map(function(p){var im=thumb(p);return '<a href="#/work/'+p.slug+'" data-c="'+p.cat+'"><span class="im" style="position:relative;overflow:hidden;--ar:'+tar(p)+';'+bg(im)+'">'+liveIf(p)+'</span><span class="t">'+esc(p.title)+'</span><span class="c">'+esc(listSub(p))+'</span></a>'}).join('');
+  $('#v-work').innerHTML='<div class="wk"><h1 class="sr">'+L.sel+'</h1><div class="wk-top"><div class="filters" role="group" aria-label="'+L.sel+'">'+fb+'</div><div class="wk-r">'+VIEWS+'<span class="n" id="wkN"></span></div></div>'+
+    (view==='v'?'<div class="wv"><ul class="wv-list">'+list+'</ul><div class="wv-col" id="wvCol">'+col+'</div><div class="wv-meta" id="wvMeta"></div></div>':'<div class="wg">'+grid+'</div>')+
+    '</div>';
+  applyFilt()}
+function applyFilt(){var n=0;document.querySelectorAll('#v-work [data-c]').forEach(function(a){var on=filt==='all'||a.dataset.c===filt;a.hidden=!on;if(on&&a.parentNode.classList.contains('wv-col'))n++});
+  document.querySelectorAll('.filters button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.f===filt)});
+  var c=filt==='all'?PROJECTS.length:PROJECTS.filter(function(p){return p.cat===filt}).length;var nEl=$('#wkN');if(nEl)nEl.textContent=String(c).padStart(2,'0');
+  wvItems=[].slice.call(document.querySelectorAll('#wvCol a')).filter(function(a){return !a.hidden});wvCur=-1;sizeWork();tickWork()}
+function sizeWork(){var c=$('#wvCol');if(!c||!c.clientWidth)return;var W=c.clientWidth,H=innerHeight,base=Math.min(W*.9,H*.5*1.7778);
+  document.querySelectorAll('#wvCol a').forEach(function(a){var p=PROJECTS[+a.dataset.k];a.style.width=eqW(tar(p),base,W,H*.62)+'px'})}
+function tickWork(){if(!$('#v-work').classList.contains('on')||!wvItems.length)return;var vh=innerHeight,best=-1,bd=1e9;
+  wvItems.forEach(function(a,i){var r=a.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-vh/2),k=Math.min(1,d/(vh*.5)),e=(1+Math.cos(Math.PI*k))/2;
+    a.style.transform='scale('+(reduce?1:(.36+.64*e)).toFixed(4)+')';if(d<bd){bd=d;best=i}});
+  if(best!==wvCur){wvCur=best;var a=wvItems[best],k=+a.dataset.k,p=PROJECTS[k];
+    wvItems.forEach(function(x,i){x.classList.toggle('on',i===best)});
+    document.querySelectorAll('.wv-list a').forEach(function(x){x.classList.toggle('on',+x.dataset.k===k)});
+    var m=$('#wvMeta');if(m)m.innerHTML='<div>'+esc(p.title)+'</div><div class="m">'+esc(p.role[lang])+'</div><div class="m">'+esc(listSub(p))+(p.year&&p.year!=='—'?' · '+esc(p.year):'')+'</div>'}}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.filters button');if(b){filt=b.dataset.f;applyFilt();return}
+  var v=e.target.closest&&e.target.closest('.views button');if(v){view=v.dataset.v;buildWork();scrollTo(0,0);requestAnimationFrame(function(){sizeWork();wvCur=-1;tickWork()});return}
+  var l=e.target.closest&&e.target.closest('.wv-list a');if(l&&view==='v'){e.preventDefault();var a=document.querySelector('#wvCol a[data-k="'+l.dataset.k+'"]');if(a)scrollTo({top:a.getBoundingClientRect().top+scrollY-innerHeight/2+a.offsetHeight/2,behavior:reduce?'auto':'smooth'})}});
+
+/* reproductor (barra tipo MÚSCULO) */
+function vbar(){var t=T[lang];return '<div class="vbar"><button class="pp" type="button">'+t.pause+'</button><div class="track"><div class="fill"></div></div><button class="snd" type="button">'+t.sOn+'</button><button class="fs" type="button">'+t.fs+'</button></div>'}
+var CROP={'1246400742':1.1,'1209617395':1.05,'1209617397':1.05,'1209617396':1.05};
+function vframe(cls,v){return '<div class="'+cls+'" style="'+(CROP[v.id]?'--crop:'+CROP[v.id]+';':'')+bg(v.poster)+'"><iframe src="'+vsrc(v.id,true)+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video"></iframe></div>'+vbar()}
+/* controles por postMessage (sin script externo de Vimeo) */
+function vpost(f,method,value){try{f.contentWindow.postMessage(JSON.stringify(value===undefined?{method:method}:{method:method,value:value}),'*')}catch(e){}}
+var VW=[];
+addEventListener('message',function(e){if(!/vimeo\.com$/.test((function(){try{return new URL(e.origin).hostname}catch(x){return ''}})()))return;
+  var d;try{d=typeof e.data==='string'?JSON.parse(e.data):e.data}catch(x){return}if(!d)return;
+  for(var i=0;i<VW.length;i++){var w=VW[i];if(w.f.contentWindow!==e.source)continue;
+    if(d.event==='ready'){vpost(w.f,'addEventListener','timeupdate');vpost(w.f,'play')}
+    if(d.event==='timeupdate'&&d.data){w.dur=d.data.duration;w.fill.style.width=((d.data.percent||0)*100).toFixed(1)+'%'}
+    if(d.method==='getDuration')w.dur=+d.value||0;
+    if(d.method==='getCurrentTime'&&w.dur)w.fill.style.width=Math.min(100,(+d.value/w.dur)*100).toFixed(1)+'%'}});
+setInterval(function(){VW.forEach(function(w){if(!document.body.contains(w.f))return;if(!w.dur)vpost(w.f,'getDuration');vpost(w.f,'getCurrentTime')})},400);
+function initPlayers(){var t=T[lang];VW=[];
+  document.querySelectorAll('#v-proj .pwrap').forEach(function(w){var f=w.querySelector('iframe');if(!f)return;
+    var o={f:f,fill:w.querySelector('.fill'),dur:0,paused:false,muted:true};VW.push(o);
+    var pp=w.querySelector('.pp'),snd=w.querySelector('.snd'),fs=w.querySelector('.fs'),track=w.querySelector('.track');
+    f.addEventListener('load',function(){vpost(f,'addEventListener','timeupdate')});
+    pp.onclick=function(){o.paused=!o.paused;vpost(f,o.paused?'pause':'play');pp.textContent=o.paused?t.play:t.pause};
+    snd.onclick=function(){o.muted=!o.muted;vpost(f,'setMuted',o.muted);vpost(f,'setVolume',o.muted?0:1);if(!o.muted&&o.paused){o.paused=false;vpost(f,'play');pp.textContent=t.pause}snd.textContent=o.muted?t.sOn:t.sOff};
+    track.onclick=function(e){if(!o.dur)return;var r=track.getBoundingClientRect();vpost(f,'setCurrentTime',o.dur*(e.clientX-r.left)/r.width)};
+    fs.onclick=function(){var on=w.classList.toggle('fsx');document.body.classList.toggle('fslock',on)}})}
+addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.fsx').forEach(function(w){w.classList.remove('fsx')});document.body.classList.remove('fslock')}});
+
+function creditsHTML(p){var t=T[lang];
+  return '<div class="col credits"><p class="pt">'+esc(p.title)+'</p><p class="row"><span class="lbl">'+t.client+'</span><span>'+esc(p.client)+'</span></p><p class="row"><span class="lbl">'+t.role+'</span><span>'+esc(p.role[lang])+'</span></p><p class="row"><span class="lbl">'+t.year+'</span><span>'+esc(p.year)+'</span></p></div>'}
+function worksHTML(slug){var t=T[lang];
+  return '<section class="brandline"><p class="made">'+t.made+'</p></section>'+
+   '<section class="locations"><p class="lh">'+t.selected+'</p><ul>'+PROJECTS.map(function(p){return '<li><a href="#/work/'+p.slug+'"'+(p.slug===slug?' class="cur"':'')+'>'+esc(p.title)+'</a></li>'}).join('')+'</ul></section>'+
+   '<p class="foot"><a class="back" href="#/">'+t.home+'</a></p>'}
+
+function buildProject(slug){var p=bySlug(slug);if(!p){location.hash='#/work';return}
+  if(p.kind==='film'){buildFilm(p);return}
+  var m=p.main,vert=m.ar<1.2,h='',desc=p.desc?'<div class="col"><p>'+esc(p.desc[lang])+'</p></div>':'<div class="col"></div>';
+  var media=m.id?'<figure class="media pwrap" style="margin:0">'+vframe('frame',{id:m.id,poster:m.poster||(vert?'':p.poster)})+'</figure>'
+                :'<figure class="media" style="margin:0"><div class="frame"><img src="'+esc(m.img)+'" alt="'+esc(p.title)+'"></div></figure>';
+  h+='<div class="stage '+(vert?'vert':'land')+'" style="--ar:'+m.ar+'">'+media+
+     '<section class="cols"><div class="spacer"></div>'+desc+creditsHTML(p)+'</section>'+
+     (vert?'<p class="rotmeta">Jimena Luja — '+esc(p.tag)+'</p>':'')+'</div>';
+  if(p.statement){var s=p.statement;h+='<section class="statement"><div class="st-label"><span>'+esc(s.label[lang])+'</span><span class="st-sub">'+esc(s.sub)+'</span></div><p class="st-lead">'+esc(s.lead[lang])+'</p><div class="st-body"><p>'+esc(s.body[lang])+'</p></div></section>'}
+  if(p.seq||p.grid){h+='<section class="seq">';
+    (p.seq||[]).forEach(function(v){h+='<div class="seqitem boxed pwrap" style="--ar:'+v.ar+'">'+vframe('seqframe',v)+(v.label?'<p class="seqlbl cap">'+esc(v.label)+'</p>':'')+'</div>'});
+    if(p.grid)h+='<div class="seqgrid">'+p.grid.map(function(g){return '<figure class="gitem'+(g.wide?' wide':'')+(g.sola?' sola':'')+'" style="--ar:'+g.ar+'"><img src="'+esc(g.img)+'" alt="'+esc(p.title)+'" loading="lazy"></figure>'}).join('')+'</div>';
+    h+='</section>'}
+  h+=worksHTML(p.slug);
+  $('#v-proj').innerHTML='<article class="pj">'+h+'</article>';initPlayers()}
+
+function buildFilm(p){var t=T[lang],L=lang==='es'?{back:'Volver',more:'Más películas'}:{back:'Back',more:'More films'};
+  var rows=[[t.director,p.director],[t.year,p.year],[t.country,p.country[lang]],[t.role,p.role[lang]]];
+  if(p.collab)rows.push([t.collab,p.collab]);rows.push([t.recog,p.recog[lang]]);
+  var dl='<dl class="fm-dl">'+rows.map(function(r){return '<dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd>'}).join('')+'</dl>';
+  var vid=p.video?'<div class="seqitem boxed pwrap" style="--ar:'+p.video.ar+'">'+vframe('seqframe',{id:p.video.id,poster:p.poster})+'</div>':'';
+  var others=FILMS.filter(function(f){return f!==p}).map(function(f){return '<a href="#/work/'+f.slug+'"><span class="im" style="--ar:'+rat(f.fposter)+';'+bg(f.fposter)+'"></span><span class="t">'+esc(f.title)+'</span></a>'}).join('');
+  var hv=!!p.video;
+  var mini=hv?'<div class="fm-mini rv" style="--ar:'+rat(p.fposter)+';'+bg(p.fposter)+'" role="img" aria-label="'+esc(p.title)+'"></div>':'';
+  var main=hv?vid:'<div class="fm-poster rv" style="--ar:'+rat(p.fposter)+';'+bg(p.fposter)+'" role="img" aria-label="'+esc(p.title)+'"></div>';
+  $('#v-proj').innerHTML='<section class="fm'+(hv?' has-v':'')+'"><aside class="fm-side">'+mini+'<h1 class="rv">'+esc(p.title)+'</h1><p class="k rv">'+esc(p.fk[lang])+' · '+esc(t.films)+'</p><div class="rv">'+dl+'</div><a class="fm-back" href="#/work">'+L.back+'</a></aside>'+
+    '<div class="fm-main">'+main+'</div></section>'+
+    '<section class="fm-more"><p>'+L.more+'</p><div class="fm-row">'+others+'</div></section>';
+  initPlayers();reveal()}
+
+function buildAbout(){var es=lang==='es';
+  var lead=es?'Jimena Luja es directora creativa radicada en la Ciudad de México. Concibe y dirige proyectos de principio a fin, del concepto y el set a la postproducción y la entrega, con la estructura de una agencia concentrada en una sola persona.'
+             :'Jimena Luja is a creative director based in Mexico City. She conceives and leads projects end to end, from concept and set to post-production and delivery, with the structure of an agency held by a single person.';
+  var body=es?['Su práctica integra dirección, efectos visuales, CGI, medios generativos, composición, edición y color en flujos de trabajo híbridos que dan lugar a contenido visualmente complejo y guiado por el concepto.','Trabaja en campañas, comerciales, moda, editorial, video musical y cine con marcas y artistas de México y Nueva York. Es cofundadora de Dominio Común.']
+             :['Her practice brings together direction, visual effects, CGI, generative media, compositing, editing and color through hybrid workflows that produce visually complex, concept-driven work.','She works across campaigns, commercials, fashion, editorial, music videos and film with brands and artists from Mexico and New York. She is a co-founder of Dominio Común.'];
+  var S=es?{srv:'Servicios:',cli:'Clientes:',cine:'Cine:',ind:'Áreas:',con:'Contacto:',tel:'WhatsApp:',dir:'Estudio:',red:'Redes:'}:{srv:'Services:',cli:'Clients:',cine:'Film:',ind:'Fields:',con:'Contact:',tel:'WhatsApp:',dir:'Studio:',red:'Socials:'};
+  var srv=es?['Dirección creativa','Dirección','Postproducción','Efectos visuales','CGI y 3D','Medios generativos','Edición y color','Sonido','UX / UI','Diseño gráfico']:['Creative direction','Direction','Post-production','Visual effects','CGI & 3D','Generative media','Editing & color','Sound','UX / UI','Graphic design'];
+  var ind=es?'Moda, publicidad, editorial, música, cine, tecnología':'Fashion, advertising, editorial, music, film, technology';
+  var cli=['The North Face','Movistar','Mugler','Nissan','Burger King','Pocari Sweat','Purple Magazine','Bandido Studio','Filia','Buazizi'];
+  var cine=['Carlos Reygadas','Luis Javier Henaine','Nathalia Acevedo','Alba Gaviraghi'];
+  function blk(l,inner){return '<div class="ab-blk rv"><span class="l">'+l+'</span>'+inner+'</div>'}
+  function ul(a){return '<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'}
+  var contact=blk(S.con,'<a href="mailto:'+esc(CONFIG.email)+'">'+esc(CONFIG.email)+'</a>')+
+    (CONFIG.phone?blk(S.tel,'<a href="https://wa.me/'+esc(CONFIG.phone.replace(/\D/g,''))+'" target="_blank" rel="noopener">'+esc(CONFIG.phone)+'</a>'):'')+
+    blk(S.dir,'<span>'+CONFIG.address+'</span>')+
+    (CONFIG.instagram?blk(S.red,'<a href="'+esc(CONFIG.instagram)+'" target="_blank" rel="noopener">@ji.me.nae ↗</a>'):'');
+  $('#v-about').innerHTML='<div class="ab" id="contact"><p class="ab-lead rv">'+esc(lead)+'</p>'+
+    '<div class="ab-grid"><div class="rv">'+body.map(function(x){return '<p>'+esc(x)+'</p>'}).join('')+'</div>'+
+    '<div>'+blk(S.srv,ul(srv))+blk(S.ind,'<span>'+esc(ind)+'</span>')+'</div>'+
+    '<div>'+contact+blk(S.cli,ul(cli))+blk(S.cine,ul(cine))+'</div></div>'+
+    '<p class="ab-word" aria-hidden="true">Jimena Luja</p></div>';
+  reveal()}
+var rvObs=null;
+function reveal(){var els=document.querySelectorAll('.view.on .rv:not(.in), #v-proj .rv:not(.in), #v-about .rv:not(.in)');
+  if(reduce||!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+  if(!rvObs)rvObs=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){var d=[].indexOf.call(x.target.parentNode.children,x.target);x.target.style.transitionDelay=Math.min(d,6)*70+'ms';x.target.classList.add('in');rvObs.unobserve(x.target)}})},{rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){rvObs.observe(e)})}
+function buildFoot(){$('#foot').innerHTML='<span class="cap">© '+new Date().getFullYear()+' Jimena Luja</span>'+(CONFIG.libelulaUrl?'<a class="cap" href="'+esc(CONFIG.libelulaUrl)+'">Dominio Común ↗</a>':'<span class="cap">Dominio Común</span>')}
+
+var hdr=$('header'),lastY=0,tick=false;
+function headerState(){var y=scrollY;if(y<60||$('#sheet').classList.contains('open'))hdr.classList.remove('hide');else if(y>lastY+4)hdr.classList.add('hide');else if(y<lastY-4)hdr.classList.remove('hide');hdr.classList.toggle('solid',y>10);lastY=y}
+addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){tick=false;headerState();tickMv();tickWork()})}},{passive:true});
+
+function route(){var h=location.hash.replace(/^#\/?/,''),parts=h.split('/'),r=parts[0]||'home';
+  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on')});
+  document.querySelectorAll('header nav a').forEach(function(a){a.removeAttribute('aria-current')});
+  $('#sheet').classList.remove('open');hdr.classList.remove('hide');document.body.classList.remove('fslock');
+  if(r!=='work'||!parts[1])$('#v-proj').innerHTML='';
+  if(r==='work'&&parts[1]){buildProject(parts[1]);$('#v-proj').classList.add('on');scrollTo(0,0);mark('work')}
+  else if(r==='about'||r==='contact'){buildAbout();$('#v-about').classList.add('on');scrollTo(0,0);mark('about')}
+  else if(r==='work'){buildWork();$('#v-work').classList.add('on');scrollTo(0,0);mark('work');requestAnimationFrame(function(){sizeWork();wvCur=-1;tickWork()})}
+  else{$('#v-home').classList.add('on');scrollTo(0,0)}
+  lastY=scrollY;headerState();if(r==='home')setTimeout(layout,40);else $('#cap').classList.remove('on')}
+function mark(k){var a=document.querySelector('[data-r="'+k+'"]');if(a)a.setAttribute('aria-current','page')}
+function applyLang(){var t=T[lang];document.documentElement.lang=lang;
+  $('#lang').innerHTML=lang==='es'?'<b>ES</b>&nbsp;/ EN':'ES /&nbsp;<b>EN</b>';$('#menu').textContent=t.menu;
+  [['n-work','work'],['n-about','about'],['s-work','work'],['s-about','about']].forEach(function(x){$('#'+x[0]).textContent=t[x[1]]});
+  buildHome();buildFoot();route();startCycle()}
+$('#lang').addEventListener('click',function(){lang=lang==='es'?'en':'es';ls('lang',lang);applyLang()});
+$('#hint').addEventListener('click',function(){$('#col').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})});
+$('#word').addEventListener('click',function(){clearInterval(cyc);cycle();cyc=setInterval(cycle,1600)});
+$('#menu').addEventListener('click',function(){var o=$('#sheet').classList.toggle('open');this.setAttribute('aria-expanded',o)});
+addEventListener('hashchange',route);addEventListener('resize',function(){layout();sizeWord();sizeWork()});
+function clock(){var c=$('#clock');if(!c)return;try{c.textContent='CDMX '+new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'America/Mexico_City'})}catch(e){}}
+clock();setInterval(clock,20000);
+applyLang();
+if(document.fonts)document.fonts.ready.then(sizeWord);
+}
+</script>
+</body>
+</html>
+
