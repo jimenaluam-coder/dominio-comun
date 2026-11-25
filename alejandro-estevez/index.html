@@ -421,6 +421,39 @@ setInterval(clock,15000);
 applyLang();
 window.addEventListener('load',function(){layout();setTimeout(function(){PROJECTS.forEach(function(p){var i=new Image();i.src=p.src})},800)});
 </script>
+
+<script>
+/* Flechas vectoriales propias: sustituyen los caracteres ↗ ↓ ← → (iOS y Android los dibujan como emoji) */
+(function(){
+  var P = {
+    '↗': 'M2 10L10 2M4 2h6v6',
+    '→': 'M1 6h10M7 2l4 4-4 4',
+    '←': 'M11 6H1M5 2L1 6l4 4',
+    '↓': 'M6 1v10M2 7l4 4 4-4'
+  };
+  var RE = /[↗→←↓]️?/g, busy = false;
+  function svg(ch){
+    var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    s.setAttribute('viewBox', '0 0 12 12'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('focusable', 'false');
+    s.setAttribute('class', 'ar');
+    s.style.cssText = 'width:.78em;height:.78em;vertical-align:-.04em;display:inline-block;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:square;stroke-linejoin:miter;overflow:visible';
+    var p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', P[ch.charAt(0)]); s.appendChild(p);
+    return s;
+  }
+  function walk(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), n, list = [];
+    while ((n = w.nextNode())) { var pn = n.parentNode && n.parentNode.nodeName; if (pn !== 'SCRIPT' && pn !== 'STYLE' && pn !== 'TITLE' && RE.test(n.nodeValue)) list.push(n); RE.lastIndex = 0; }
+    list.forEach(function(t){
+      var txt = t.nodeValue, frag = document.createDocumentFragment(), last = 0, m; RE.lastIndex = 0;
+      while ((m = RE.exec(txt))) { frag.appendChild(document.createTextNode(txt.slice(last, m.index))); frag.appendChild(svg(m[0])); last = m.index + m[0].length; }
+      frag.appendChild(document.createTextNode(txt.slice(last))); t.parentNode.replaceChild(frag, t);
+    });
+  }
+  function run(){ if (busy) return; busy = true; try { walk(document.body); } finally { busy = false; } }
+  run();
+  new MutationObserver(function(){ run(); }).observe(document.body, { childList: true, characterData: true, subtree: true });
+})();
+</script>
 </body>
 </html>
 
