@@ -27,13 +27,18 @@
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; margin: 0; }
-body {
+html { background: #c9cde6; -webkit-text-size-adjust: 100%; }
+/* El cielo vive en su propia capa fija: cubre siempre toda la pantalla, incluso cuando la barra del navegador móvil sube o baja */
+.sky {
+  position: fixed; left: 0; top: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; pointer-events: none;
   background:
     linear-gradient(90deg, rgba(200,150,205,var(--ta-j)) 0, rgba(200,150,205,var(--ta-j)) calc(var(--bx) - 20%), rgba(110,180,210,var(--ta-a)) calc(var(--bx) + 20%), rgba(110,180,210,var(--ta-a)) 100%),
     var(--sky);
-  background-attachment: fixed; color: var(--ink); color-scheme: light;
+}
+body {
+  background: transparent; color: var(--ink); color-scheme: light;
   font-family: var(--mono); font-weight: 500; text-transform: uppercase;
-  -webkit-font-smoothing: antialiased; overflow: hidden;
+  -webkit-font-smoothing: antialiased; overflow: hidden; -webkit-tap-highlight-color: transparent;
 }
 a { color: inherit; text-decoration: none; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -43,7 +48,7 @@ a { color: inherit; text-decoration: none; }
 .mark-l { left: 10px; } .mark-r { right: 10px; }
 .mk { display: block; width: 16px; height: auto; opacity: .85; }
 
-.page { height: 100%; display: flex; flex-direction: column; }
+.page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
 .head { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .6s var(--ease), opacity .4s ease; }
 .head > div { overflow: hidden; min-height: 0; padding: clamp(10px,1.3vw,18px) var(--gut) 0 var(--gut); }
 .bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
@@ -82,12 +87,19 @@ a { color: inherit; text-decoration: none; }
 #soon small { font-size: 12px; color: var(--ink); opacity: .7; letter-spacing: .06em; }
 #soon button { font: inherit; font-size: 12px; font-weight: 700; letter-spacing: .08em; background: none; color: var(--ink); border: 0; border-bottom: 2px solid var(--ink); padding: 4px 0; cursor: pointer; }
 
-@media (max-width: 760px) {
+.half { touch-action: manipulation; }
+@media (max-width: 760px), (hover: none) {
   .bio { font-size: clamp(10px, 2.9vw, 13px); }
   .mark { display: none; }
+  /* En pantallas táctiles no hay cursor: ambos nombres se ven desde el inicio, pequeños, uno en cada lado.
+     Un toque agranda ese lado; un segundo toque abre el sitio. */
+  .split .nm { opacity: .8; transform: none; font-size: 11px; letter-spacing: .04em; bottom: max(var(--gut), env(safe-area-inset-bottom)); }
+  .split .nm::before { content: ''; display: block; width: 18px; height: 1px; background: currentColor; margin-bottom: 8px; opacity: .6; }
+  .nm-a::before { margin-left: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .half, .head, }
+  .half, .head { transition: none; }
+}
 
 /* intro: primero cielo y parvada; luego aparecen texto, marcas y demás */
 body.intro .head, body.intro .mark, body.intro .nm { opacity: 0 !important; }
@@ -104,6 +116,7 @@ body.intro-go .head, body.intro-go .mark { transition: opacity 1.6s ease, grid-t
 <meta name="twitter:image" content="https://dominiocomun.com/og.png">
 </head>
 <body class="intro">
+<div class="sky" aria-hidden="true"></div>
 <div class="mark mark-l" aria-hidden="true"><svg class="mk" viewBox="0 0 200 200" width="26" height="26" fill="none" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 112 C40 70 76 66 100 100 C124 66 160 70 186 112"/></svg></div>
 <div class="mark mark-r" aria-hidden="true"><svg class="mk" viewBox="0 0 200 200" width="26" height="26" fill="none" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 112 C40 70 76 66 100 100 C124 66 160 70 186 112"/></svg></div>
 
@@ -201,8 +214,8 @@ document.getElementById('bio').addEventListener('pointerover', function (e) {
 document.getElementById('bio').addEventListener('pointerout', function (e) {
   if (e.target.closest('.who') && e.pointerType !== 'touch') setActive('');
 });
-document.getElementById('bio').addEventListener('focusin', function (e) { var t = e.target.closest('.who'); if (t) setActive(t.dataset.who); });
-document.getElementById('bio').addEventListener('focusout', function (e) { if (e.target.closest('.who')) setActive(''); });
+document.getElementById('bio').addEventListener('focusin', function (e) { var t = e.target.closest('.who'); if (t && t.matches(':focus-visible')) setActive(t.dataset.who); });
+document.getElementById('bio').addEventListener('focusout', function (e) { if (e.target.closest('.who') && !isTouch()) setActive(''); });
 document.getElementById('bio').addEventListener('click', function (e) { var t = e.target.closest('.who'); if (t) activate(t.dataset.who); });
 document.getElementById('bio').addEventListener('keydown', function (e) {
   var t = e.target.closest('.who'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openSite(t.dataset.who); }
@@ -210,8 +223,9 @@ document.getElementById('bio').addEventListener('keydown', function (e) {
 Array.prototype.forEach.call(document.querySelectorAll('.half'), function (h) {
   h.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') setActive(h.dataset.who); });
   h.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') setActive(''); });
-  h.addEventListener('focus', function () { setActive(h.dataset.who); });
-  h.addEventListener('blur', function () { setActive(''); });
+  // el foco solo activa con teclado; un toque también da foco y adelantaría el segundo toque
+  h.addEventListener('focus', function () { if (h.matches(':focus-visible')) setActive(h.dataset.who); });
+  h.addEventListener('blur', function () { if (!isTouch()) setActive(''); });
   h.addEventListener('click', function (e) { e.preventDefault(); activate(h.dataset.who); });
 });
 document.getElementById('lang').addEventListener('click', function () { lang = lang === 'es' ? 'en' : 'es'; lsSet('lang', lang); renderBio(); });
