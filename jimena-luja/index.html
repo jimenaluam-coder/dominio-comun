@@ -373,6 +373,11 @@ var PROJECTS=[
   poster:'img/v-venteya.jpg',
   main:{id:'723021018',ar:1.7778},
   desc:L('Video musical para el sencillo Vente Ya: dirección, VFX y finalización, con color, limpieza y entornos compuestos.','Music video for the single Vente Ya — direction, VFX and finishing: color, cleanup and composited environments.')},
+ {slug:'my-space',cat:'music',kind:'video',title:'My Space',client:'Meth Math',year:'2026',dir:'Antonella Dellarossa',
+  role:L('Postproducción / VFX','Post-production / VFX'),tag:'Meth Math · Music Video',
+  poster:VT('2230337345-c4a191efbdf4a6e282876535409bc5d2cec78a7cc16d0bc1e42b6bb7e4534149'),
+  main:{id:'1249852690',ar:1.7778},
+  desc:L('Video musical de Meth Math, dirigido por Antonella Dellarossa: postproducción y VFX.','Music video for Meth Math, directed by Antonella Dellarossa — post-production and VFX.')},
  {slug:'ai-mock-campaign',cat:'personal',kind:'image',title:'AI Mock Campaign',client:'MÚSCULO',year:'2026',
   role:L('Concepto / Imagen con IA / Dirección de arte','Concept / AI imagery / Art direction'),tag:'MÚSCULO · Lacrosse',
   poster:'img/mock-dive.jpg',
@@ -402,7 +407,7 @@ var PROJECTS=[
   recog:L('FICValdivia 2026 · Selección oficial','FICValdivia 2026 · Official Selection'),fposter:'img/film-hijas.jpg'}
 ];
 /* orden: del mejor al peor */
-var ORDER=['pocari','serie-nova','movistar','the-north-face','heil-jupiter','mugler','filia','ai-mock-campaign','desaparecer-por-completo','salon-de-belleza','aberration','vente-ya','una-fortaleza','hijas-unikas','yoplait','burger-king','nissan'];
+var ORDER=['pocari','serie-nova','movistar','the-north-face','heil-jupiter','mugler','filia','ai-mock-campaign','desaparecer-por-completo','salon-de-belleza','aberration','my-space','vente-ya','una-fortaleza','hijas-unikas','yoplait','burger-king','nissan'];
 PROJECTS.sort(function(a,b){return ORDER.indexOf(a.slug)-ORDER.indexOf(b.slug)});
 PROJECTS.forEach(function(p){p.feat=FEATURED.indexOf(p.slug)>-1;if(p.kind==='film'&&!p.poster)p.poster=p.fposter});
 var FILMS=PROJECTS.filter(function(p){return p.kind==='film'});
@@ -530,7 +535,7 @@ function initPlayers(){var t=T[lang];VW=[];
 addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.fsx').forEach(function(w){w.classList.remove('fsx')});document.body.classList.remove('fslock')}});
 
 function creditsHTML(p){var t=T[lang];
-  return '<div class="col credits"><p class="pt">'+esc(p.title)+'</p><p class="row"><span class="lbl">'+t.client+'</span><span>'+esc(p.client)+'</span></p><p class="row"><span class="lbl">'+t.role+'</span><span>'+esc(p.role[lang])+'</span></p><p class="row"><span class="lbl">'+t.year+'</span><span>'+esc(p.year)+'</span></p></div>'}
+  return '<div class="col credits"><p class="pt">'+esc(p.title)+'</p><p class="row"><span class="lbl">'+t.client+'</span><span>'+esc(p.client)+'</span></p>'+(p.dir?'<p class="row"><span class="lbl">'+t.director+'</span><span>'+esc(p.dir)+'</span></p>':'')+'<p class="row"><span class="lbl">'+t.role+'</span><span>'+esc(p.role[lang])+'</span></p><p class="row"><span class="lbl">'+t.year+'</span><span>'+esc(p.year)+'</span></p></div>'}
 function worksHTML(slug){var t=T[lang];
   return '<section class="brandline"><p class="made">'+t.made+'</p></section>'+
    '<section class="locations"><p class="lh">'+t.selected+'</p><ul>'+PROJECTS.map(function(p){return '<li><a href="#/work/'+p.slug+'"'+(p.slug===slug?' class="cur"':'')+'>'+esc(p.title)+'</a></li>'}).join('')+'</ul></section>'+
