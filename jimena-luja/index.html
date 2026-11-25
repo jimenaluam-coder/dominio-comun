@@ -300,7 +300,7 @@ var FEATURED=['ai-mock-campaign','the-north-face','movistar','heil-jupiter','ser
 
 var MX='https://musculo.xyz/images/';
 /* proporción real de cada imagen (ancho / alto) */
-var RATIO={'img/v-yoplait.jpg':1.5,'img/v-tnf.jpg':1.7778,'img/v-movistar.jpg':1.7778,'img/v-mugler.jpg':1.7778,'img/v-bk.jpg':1.7778,'img/v-aberration.jpg':1.7778,'img/v-venteya.jpg':1.7778,'img/pocari-sun.jpg':.8,'img/nova-altar.jpg':1.7778,'img/film-heil-jupiter.jpg':.7483,'img/film-desaparecer.jpg':.6563,'img/film-salon.jpg':.785,'img/film-fortaleza.jpg':.755,'img/film-hijas.jpg':.8075,'img/mock-dive.jpg':.8085,'img/v-heil.jpg':1.3128,'img/v-nova-core.jpg':.5624,'img/v-nissan.jpg':2,'img/v-filia-anniv.jpg':.8};
+var RATIO={'https://i.vimeocdn.com/video/2182221493-d3a945eb45c0a115bca70d5787b98ae685aed1a473587a3164d8e9d14659831a-d_1280?region=us':1,'https://musculo.xyz/assets/mt-1.jpg':1,'img/v-yoplait.jpg':1.5,'img/v-tnf.jpg':1.7778,'img/v-movistar.jpg':1.7778,'img/v-mugler.jpg':1.7778,'img/v-bk.jpg':1.7778,'img/v-aberration.jpg':1.7778,'img/v-venteya.jpg':1.7778,'img/pocari-sun.jpg':.8,'img/nova-altar.jpg':1.7778,'img/film-heil-jupiter.jpg':.7483,'img/film-desaparecer.jpg':.6563,'img/film-salon.jpg':.785,'img/film-fortaleza.jpg':.755,'img/film-hijas.jpg':.8075,'img/mock-dive.jpg':.8085,'img/v-heil.jpg':1.3128,'img/v-nova-core.jpg':.5624,'img/v-nissan.jpg':2,'img/v-filia-anniv.jpg':.8};
 function rat(u){return RATIO[u]||1.7778}
 /* ancho para que todas las piezas tengan la misma área en pantalla, sin perder su proporción */
 function eqW(ar,base,maxW,maxH){var A=base*base/1.7778,w=Math.sqrt(A*ar);return Math.min(w,maxW,maxH*ar)}
@@ -378,6 +378,18 @@ var PROJECTS=[
   poster:VT('2230337345-c4a191efbdf4a6e282876535409bc5d2cec78a7cc16d0bc1e42b6bb7e4534149'),
   main:{id:'1249852690',ar:1.7778},
   desc:L('Video musical de Meth Math, dirigido por Antonella Dellarossa: postproducción y VFX.','Music video for Meth Math, directed by Antonella Dellarossa — post-production and VFX.')},
+ {slug:'tears-of-dreams',cat:'personal',kind:'video',title:'Tears of Dreams',client:'MÚSCULO',year:'2024',
+  role:L('CGI / Dirección creativa','CGI / Creative direction'),tag:'MÚSCULO · Self-initiated',
+  poster:VT('2182221493-d3a945eb45c0a115bca70d5787b98ae685aed1a473587a3164d8e9d14659831a'),
+  main:{id:'996474988',ar:1},
+  grid:[['limbo',1],['limbo-c',1],['horse',1],['tears',1],['normal',1],['cult-member',1],['bosque',1.7778,1]].map(function(n){return {img:MX+'tears-of-dreams/'+n[0]+'.jpg',ar:n[1],wide:n[2]}}),
+  desc:L('Una película autoiniciada sobre la memoria y la materia: simulaciones de líquidos, paisajes procedurales y una coreografía lenta, rendidos como un único sueño continuo.','A self-initiated film exploring memory and material — liquid simulations, procedural landscapes and slow choreography rendered as a single continuous dream.')},
+ {slug:'myke-towers-junior-h',cat:'music',kind:'image',title:'Myke Towers × Junior H',client:'Myke Towers × Junior H × The Rudeboyz',year:'2024',
+  role:L('Diseño de portada / CGI','Cover design / CGI'),tag:'Mal de Amores · Cover Design',
+  poster:'https://musculo.xyz/assets/mt-1.jpg',
+  main:{img:'https://musculo.xyz/assets/mt-1.jpg',ar:1},
+  grid:[['mt-2',1],['mt-3',1],['mt-4',1],['mt-5',1],['mt-6',1.0007]].map(function(n){return {img:'https://musculo.xyz/assets/'+n[0]+'.jpg',ar:n[1]}}),
+  desc:L('Portada del sencillo “Mal de Amores”: piezas de satín en relieve construidas en CG y terminadas como material impreso.','Cover artwork for the single “Mal de Amores” — embossed satin pieces built in CG and finished as printed matter.')},
  {slug:'ai-mock-campaign',cat:'personal',kind:'image',title:'AI Mock Campaign',client:'MÚSCULO',year:'2026',
   role:L('Concepto / Imagen con IA / Dirección de arte','Concept / AI imagery / Art direction'),tag:'MÚSCULO · Lacrosse',
   poster:'img/mock-dive.jpg',
@@ -407,7 +419,7 @@ var PROJECTS=[
   recog:L('FICValdivia 2026 · Selección oficial','FICValdivia 2026 · Official Selection'),fposter:'img/film-hijas.jpg'}
 ];
 /* orden: del mejor al peor */
-var ORDER=['pocari','serie-nova','movistar','the-north-face','heil-jupiter','mugler','filia','ai-mock-campaign','desaparecer-por-completo','salon-de-belleza','aberration','my-space','vente-ya','una-fortaleza','hijas-unikas','yoplait','burger-king','nissan'];
+var ORDER=['pocari','serie-nova','movistar','the-north-face','heil-jupiter','mugler','filia','ai-mock-campaign','tears-of-dreams','desaparecer-por-completo','salon-de-belleza','aberration','my-space','myke-towers-junior-h','vente-ya','una-fortaleza','hijas-unikas','yoplait','burger-king','nissan'];
 PROJECTS.sort(function(a,b){return ORDER.indexOf(a.slug)-ORDER.indexOf(b.slug)});
 PROJECTS.forEach(function(p){p.feat=FEATURED.indexOf(p.slug)>-1;if(p.kind==='film'&&!p.poster)p.poster=p.fposter});
 var FILMS=PROJECTS.filter(function(p){return p.kind==='film'});
