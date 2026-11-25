@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Alejandro Estevez</title>
+<title>Alejandro Estévez</title>
 <meta name="theme-color" content="#f3f2ee">
 <meta name="description" content="Photographer and brand and cultural strategist.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,7 +150,7 @@ footer a:hover{color:var(--ink)}
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:description" content="Photographer and brand and cultural strategist.">
-<meta property="og:title" content="Alejandro Estevez — Dominio Común">
+<meta property="og:title" content="Alejandro Estévez — Dominio Común">
 <meta property="og:image" content="https://dominiocomun.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -160,7 +160,7 @@ footer a:hover{color:var(--ink)}
 <body>
 <a class="sr" href="#main">Skip</a>
 <header>
-  <a class="name" href="#/" id="h-name">Alejandro Estevez</a>
+  <a class="name" href="#/" id="h-name">Alejandro Estévez</a>
   <nav aria-label="Principal">
     <a class="nav-a" href="#/work" data-r="work" id="n-work">Work</a>
     <a class="nav-a" href="#/about" data-r="about" id="n-about">About</a>
@@ -245,7 +245,7 @@ var T = {
     role:'Fotógrafo y estratega de marca y cultural.',
     brand:'Marca', cats:'Categorías', client:'Cliente', link:'Enlace', visit:'Ver proyecto', none:'—',
     back:'← Proyectos', next:'Siguiente proyecto', all:'Todos los proyectos', allSm:'Archivo completo', workTitle:'Proyectos', filterAll:'Todos', year:'Año', soonCat:'Próximamente.',
-    aboutBio:'Alejandro Estevez es fotógrafo, estratega de marca y cofundador de Dominio Común. Su trabajo abarca moda, música, gastronomía y publicidad. Como creativo de agencia se especializa en trend forecasting, cool hunting y estrategia de mercado: detecta tendencias emergentes, interpreta el contexto cultural, lo traduce en dirección creativa para cada marca.',
+    aboutBio:'Alejandro Estévez es fotógrafo, estratega de marca y cofundador de Dominio Común. Su trabajo abarca moda, música, gastronomía y publicidad. Como creativo de agencia se especializa en trend forecasting, cool hunting y estrategia de mercado: detecta tendencias emergentes, interpreta el contexto cultural, lo traduce en dirección creativa para cada marca.',
     aboutL3:'Marcas',
     contactTitle:'Contacto', contactMail:'Correo', contactWa:'WhatsApp', contactIg:'Instagram', pending:'Por confirmar',
     soon:'Sitio de Dominio Común', menu:'Menú', navWork:'Proyectos', navAbout:'Acerca de', navContact:'Contacto', navSel:'Selección'
@@ -254,7 +254,7 @@ var T = {
     role:'Photographer, brand and cultural strategist.',
     brand:'Brand', cats:'Categories', client:'Client', link:'Link', visit:'View project', none:'—',
     back:'← Work', next:'Next project', all:'All projects', allSm:'Full archive', workTitle:'Work', filterAll:'All', year:'Year', soonCat:'Coming soon.',
-    aboutBio:'Alejandro Estevez is a photographer, brand strategist and co-founder of Dominio Común. His work spans fashion, music, food & beverage and advertising. As an agency creative, he specializes in trend forecasting, cool hunting and market strategy: he identifies emerging trends, reads cultural context, translates insight into creative direction for every brand.',
+    aboutBio:'Alejandro Estévez is a photographer, brand strategist and co-founder of Dominio Común. His work spans fashion, music, food & beverage and advertising. As an agency creative, he specializes in trend forecasting, cool hunting and market strategy: he identifies emerging trends, reads cultural context, translates insight into creative direction for every brand.',
     aboutL3:'Brands',
     contactTitle:'Contact', contactMail:'Email', contactWa:'WhatsApp', contactIg:'Instagram', pending:'To be confirmed',
     soon:'Dominio Común site', menu:'Menu', navWork:'Work', navAbout:'About', navContact:'Contact', navSel:'Selected'
@@ -381,7 +381,7 @@ function buildContact(){
 }
 function buildFoot(){
   var t=T[lang];
-  $('#foot').innerHTML='<span>© '+new Date().getFullYear()+' Alejandro Estevez</span>'+(CONFIG.libelulaUrl?'<a href="'+esc(CONFIG.libelulaUrl)+'">Dominio Común ↗</a>':'<span>Dominio Común</span>');
+  $('#foot').innerHTML='<span>© '+new Date().getFullYear()+' Alejandro Estévez</span>'+(CONFIG.libelulaUrl?'<a href="'+esc(CONFIG.libelulaUrl)+'">Dominio Común ↗</a>':'<span>Dominio Común</span>');
 }
 
 function route(){
@@ -405,7 +405,7 @@ function applyLang(){
   $('#lang').innerHTML=lang==='es'?'<b>ES</b> / EN':'ES / <b>EN</b>';
   $('#menu').textContent=t.menu;
   [['n-work','navWork'],['n-about','navAbout'],['n-contact','navContact'],['s-sel','navSel'],['s-work','navWork'],['s-about','navAbout'],['s-contact','navContact']].forEach(function(x){var el=document.getElementById(x[0]);if(el)el.textContent=t[x[1]]});
-  document.title='Alejandro Estevez — '+t.role.replace(/\.$/,'');
+  document.title='Alejandro Estévez — '+t.role.replace(/\.$/,'');
   buildHome(); buildFoot(); route(); clock();
 }
 function clock(){
