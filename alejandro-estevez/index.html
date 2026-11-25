@@ -62,7 +62,15 @@ header .nav-a[aria-current="page"]{font-weight:600}
 #cap{transition:opacity .3s ease;position:fixed;left:var(--gut);right:var(--gut);bottom:calc(var(--gut) - 4px);z-index:20;pointer-events:none;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
 #cap .t{font-size:clamp(30px,6.6vw,104px);line-height:.92;letter-spacing:-.045em;font-weight:500;max-width:80vw}
 #cap .m{font-size:13px;color:var(--mute);text-align:right;white-space:nowrap;padding-bottom:.5em}
-@media(max-width:760px){#cap{flex-direction:column;align-items:flex-start;gap:6px}#cap .m{text-align:left;white-space:normal}#cap .t{font-size:clamp(28px,10vw,52px)}}
+/* título y categoría de cada foto: en escritorio van abajo (fijos); en celular van pegados a su foto, pequeños, como en el sitio de Jimena */
+.ph .cp{display:none}
+@media(max-width:760px){
+  #cap{display:none}
+  .ph{margin:-5vh 0}
+  .ph .cp{display:block;padding-top:10px;transition:opacity .2s linear}
+  .ph .cpt{display:block;font-size:clamp(15px,4.4vw,19px);line-height:1.05;letter-spacing:-.02em;font-weight:500}
+  .ph .cpm{display:block;margin-top:5px;font-size:11px;line-height:1.25;color:var(--mute);letter-spacing:0}
+}
 
 /* project */
 .proj{padding:calc(var(--hh) + 6vh) var(--gut) 10vh}
@@ -266,30 +274,32 @@ var HOME=[];
 function buildHome(){
   var h='', t=T[lang]; HOME=sel();
   HOME.forEach(function(p,i){
-    h+='<a class="ph" href="#/work/'+p.slug+'" data-i="'+i+'" aria-label="'+esc(p.title[lang])+'">'+frame(p,p.title[lang],'(max-width:760px) 80vw, 40vw',i<2)+'<span class="no" aria-hidden="true">'+(i<9?'0':'')+(i+1)+'</span></a>';
+    h+='<a class="ph" href="#/work/'+p.slug+'" data-i="'+i+'" aria-label="'+esc(p.title[lang])+'">'+frame(p,p.title[lang],'(max-width:760px) 80vw, 40vw',i<2)+'<span class="no" aria-hidden="true">'+(i<9?'0':'')+(i+1)+'</span>'+'<span class="cp"><span class="cpt">'+esc(p.title[lang])+'</span><span class="cpm">'+(i<9?'0':'')+(i+1)+' / '+(HOME.length<10?'0':'')+HOME.length+' · '+esc(catNames(p).join(', '))+'</span></span></a>';
   });
   h+='<a class="all" id="all" href="#/work"><small>'+t.allSm+' ('+PROJECTS.length+')</small><b>'+t.all+' →</b></a>';
   $('#col').innerHTML=h;
   phs=[].slice.call(document.querySelectorAll('.ph'));
+  caps=phs.map(function(el){return el.querySelector('.cp')});
   layout();
 }
-var phs=[], cur=-1, ticking=false;
+var phs=[], caps=[], cur=-1, ticking=false;
 var tops=[],hs=[];
 function layout(){ /* medir posiciones sin transform */
-  var W=window.innerWidth,H=window.innerHeight,hc=(W<760?.5:.66)*H;
-  phs.forEach(function(el,i){var r=HOME[i].ratio,w=Math.min(hc*r,W*(W<760?.8:.66));el.style.width=w+'px';el.style.transform=''});
+  var W=window.innerWidth,H=window.innerHeight,hc=(W<760?.58:.66)*H;
+  phs.forEach(function(el,i){var r=HOME[i].ratio,w=Math.min(hc*r,W*(W<760?.9:.66));el.style.width=w+'px';el.style.transform=''});
   if(phs.length){var vh=window.innerHeight,col=$('#col');col.style.paddingTop=Math.max(0,vh/2-phs[0].offsetHeight/2)+'px';col.style.paddingBottom='0px';}
   tops=phs.map(function(el){return el.offsetTop}); hs=phs.map(function(el){return el.offsetHeight});
   tick();
 }
 function tick(){
   if(!$('#v-home').classList.contains('on')) return;
-  var vh=window.innerHeight, mid=window.scrollY+vh/2, best=-1, bd=1e9;
+  var vh=window.innerHeight, W760=window.innerWidth<760, mid=window.scrollY+vh/2, best=-1, bd=1e9;
   for(var i=0;i<phs.length;i++){
-    var c=tops[i]+hs[i]/2, d=Math.abs(c-mid), t=Math.min(1,d/(vh*.58));
+    var c=tops[i]+hs[i]/2, d=Math.abs(c-mid), t=Math.min(1,d/(vh*(W760?.42:.58)));
     var e=(1+Math.cos(Math.PI*t))/2; /* 1 al centro, baja suave hacia las orillas */
     var s=reduce?1:(.44+.56*e);
     phs[i].style.transform='scale('+s.toFixed(4)+')';
+    if(W760&&caps[i])caps[i].style.opacity=reduce?1:Math.max(0,Math.min(1,(e-.55)/.4)).toFixed(3);
     if(d<bd){bd=d;best=i}
   }
   if(best!==cur){cur=best;setCaption(best)}
